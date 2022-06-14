@@ -46,6 +46,8 @@
   "unpkg": "dist/antd.min.js",
   "typings": "lib/index.d.ts",
   "scripts": {
+    "bootstrap": "git remote add github 'git@github.com:ant-design/ant-design.git'",
+    "update-remote": "git checkout master && git pull github master && git push origin HEAD",
     "prepare": "husky install",
     "api-collection": "antd-tools run api-collection",
     "authors": "node ./scripts/generate-authors",
