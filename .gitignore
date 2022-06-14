@@ -17,6 +17,7 @@ Thumbs.db
 *.log
 *.log.*
 *.json.gzip
+GIT_HEAD
 node_modules/
 .buildpath
 .settings
