@@ -1,0 +1,45 @@
+@import '../../style/themes/index';
+@import '../../style/mixins/index';
+@import '../../style/mixins/gdcd/table.less';
+
+@table-prefix-cls: ~'@{ant-prefix}-table';
+@table-border: @border-width-base @border-style-base @border-color-split;
+
+// 设置full-height-table的样式
+.@{table-prefix-cls}-wrapper {
+  &.full-height {
+    .full-height-table-container();
+  }
+}
+
+.@{table-prefix-cls} {
+  // 重写单元格padding
+  &-thead > tr > th,
+  &-tbody > tr > td,
+  tfoot > tr > th,
+  tfoot > tr > td {
+    padding: @table-padding-vertical-sm @table-padding-horizontal-sm;
+  }
+
+  // 去掉表头栏目之间的短分隔线
+  &-thead {
+    & > tr > th {
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  // =========================== Content ============================
+  &-content {
+    border: @table-border;
+  }
+
+  &-tbody > tr:last-child > td {
+    border-bottom: none;
+  }
+
+  &-expanded-row-fixed {
+    width: auto !important;
+  }
+}

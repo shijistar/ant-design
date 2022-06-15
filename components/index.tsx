@@ -136,7 +136,7 @@ export { default as Steps } from './steps';
 export type { StepProps, StepsProps } from './steps';
 export { default as Switch } from './switch';
 export type { SwitchProps } from './switch';
-export { default as Table } from './table';
+export { default as Table } from './table/gdcd';
 export type {
   ColumnGroupType as TableColumnGroupType,
   ColumnProps as TableColumnProps,
@@ -144,7 +144,7 @@ export type {
   ColumnType as TableColumnType,
   TablePaginationConfig,
   TableProps,
-} from './table';
+} from './table/gdcd';
 export { default as Tabs } from './tabs';
 export type { TabPaneProps, TabsProps } from './tabs';
 export { default as Tag } from './tag';

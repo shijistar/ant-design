@@ -73,6 +73,7 @@ const columns = [
 | dataSource | 数据数组 | object\[] | - |  |
 | expandable | 配置展开属性 | [expandable](#expandable) | - |  |
 | footer | 表格尾部 | function(currentPageData) | - |  |
+| fullHeight 🔥 | 宽高都 100% 撑满整个父容器，同时在表格内部显示横向和纵向滚动条 | false |  |
 | getPopupContainer | 设置表格内各类浮层的渲染节点，如筛选菜单 | (triggerNode) => HTMLElement | () => TableHtmlElement |  |
 | loading | 页面是否加载中 | boolean \| [Spin Props](/components/spin/#API) | false |  |
 | locale | 默认文案设置，目前包括排序、过滤、空数据文案 | object | [默认值](https://github.com/ant-design/ant-design/blob/6dae4a7e18ad1ba193aedd5ab6867e1d823e2aa4/components/locale/zh_CN.tsx#L20-L37) |  |
@@ -239,7 +240,7 @@ const columns = [
 
 ```tsx
 import { Table } from 'antd';
-import { ColumnsType } from 'antd/es/table';
+import type { ColumnsType } from 'antd/es/table';
 
 interface User {
   key: number;
