@@ -187,8 +187,8 @@ export type {
   ColumnType as TableColumnType,
   ColumnProps as TableColumnProps,
   ColumnsType as TableColumnsType,
-} from './table';
-export { default as Table } from './table';
+} from './table/gdcd';
+export { default as Table } from './table/gdcd';
 
 export type { TransferProps } from './transfer';
 export { default as Transfer } from './transfer';

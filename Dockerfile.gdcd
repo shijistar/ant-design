@@ -1,0 +1,5 @@
+FROM digitalcity-registry.cn-beijing.cr.aliyuncs.com/gdc/nginx:alpine
+RUN echo "Asia/shanghai" > /etc/timezone
+COPY ./_site /usr/share/nginx/html/gdcd
+COPY ./nginx-gdcd.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80

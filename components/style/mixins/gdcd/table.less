@@ -1,0 +1,58 @@
+/** 
+ * 把父容器整个高度撑满的表格样式，放在这里，方便引用
+ * @example
+ *
+ * @import '../../style/mixins/gdcd/table.less';
+ * .my-table {
+ *   .full-height-table();
+ * }
+ */
+@table-prefix-cls: ~'@{ant-prefix}-table';
+
+.full-height-table {
+  height: 100%;
+
+  .@{ant-prefix}-spin-nested-loading {
+    height: 100%;
+
+    .@{ant-prefix}-spin-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      .@{table-prefix-cls}:not(.@{table-prefix-cls}-empty) {
+        flex: auto;
+        height: 0;
+
+        .@{table-prefix-cls}-container {
+          height: 100%;
+
+          .@{table-prefix-cls}-content {
+            max-height: 100%;
+            overflow: auto !important;
+
+            & > table {
+              height: 100%;
+
+              .@{table-prefix-cls}-thead {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+              }
+            }
+          }
+        }
+      }
+
+      .@{table-prefix-cls}-pagination {
+        flex: none;
+      }
+    }
+  }
+}
+
+.full-height-table-container {
+  .@{table-prefix-cls}-wrapper {
+    .full-height-table();
+  }
+}
