@@ -56,6 +56,7 @@ export default function renderSwitcherIcon(
 
   if (isValidElement(switcher)) {
     return cloneElement(switcher, {
+      // @ts-ignore: 由于cim-web还在使用React17，所以会有一个ts错误，升级到18后便可以去掉
       className: classNames(switcher.props.className || '', switcherCls),
     });
   }

@@ -76,7 +76,8 @@ export default function generatePicker<DateType>(generateConfig: GenerateConfig<
           ...additionalOverrideProps,
           ...(showTime ? getTimeProps({ format, picker: mergedPicker, ...showTime }) : {}),
           ...(mergedPicker === 'time'
-            ? getTimeProps({ format, ...props, picker: mergedPicker })
+            ? // @ts-ignore: 由于cim-web还在使用React17，所以会有一个ts错误，升级到18后便可以去掉
+              getTimeProps({ format, ...props, picker: mergedPicker })
             : {}),
         };
         const rootPrefixCls = getPrefixCls();
