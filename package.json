@@ -325,6 +325,9 @@
       "maxSize": "67 kB"
     }
   ],
+  "alias": [
+    "gdcd"
+  ],
   "tnpm": {
     "mode": "npm"
   }
