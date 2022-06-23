@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { IconProvider } from '@ant-design/icons';
+import IconContext from '@ant-design/icons/es/components/Context';
 import type { ConfigProviderProps as AntConfigProviderProps } from './index';
 import { copyWithStatic } from '../_util/gdcd';
 import AntConfigProvider from './index';
@@ -18,7 +18,7 @@ function GDCDConfigProvider(props: ConfigProviderProps) {
 
   return (
     <AntConfigProvider iconPrefixCls={iconPrefixCls} csp={csp} {...antdProps}>
-      <IconProvider value={memoIconContextValue}>{children}</IconProvider>
+      <IconContext.Provider value={memoIconContextValue}>{children}</IconContext.Provider>
     </AntConfigProvider>
   );
 }
