@@ -3,6 +3,7 @@ const path = require('path');
 const defaultVars = require('./scripts/default-vars');
 const darkVars = require('./scripts/dark-vars');
 const compactVars = require('./scripts/compact-vars');
+const pkgName = require('./package.json').name;
 
 function generateThemeFileContent(theme) {
   return `const { ${theme}ThemeSingle } = require('./theme');\nconst defaultTheme = require('./default-theme');\n
@@ -41,11 +42,11 @@ function buildThemeFile(theme, vars) {
   // Build less entry file: dist/antd.${theme}.less
   if (theme !== 'default') {
     fs.writeFileSync(
-      path.join(process.cwd(), 'dist', `antd.${theme}.less`),
+      path.join(process.cwd(), 'dist', `${pkgName}.${theme}.less`),
       `@import "../lib/style/${theme}.less";\n@import "../lib/style/components.less";`,
     );
     // eslint-disable-next-line no-console
-    console.log(`Built a entry less file to dist/antd.${theme}.less`);
+    console.log(`Built a entry less file to dist/${pkgName}.${theme}.less`);
   } else {
     fs.writeFileSync(
       path.join(process.cwd(), 'dist', `default-theme.js`),
@@ -77,7 +78,7 @@ function finalizeDist() {
   if (fs.existsSync(path.join(__dirname, './dist'))) {
     // Build less entry file: dist/antd.less
     fs.writeFileSync(
-      path.join(process.cwd(), 'dist', 'antd.less'),
+      path.join(process.cwd(), 'dist', `${pkgName}.less`),
       '@import "../lib/style/default.less";\n@import "../lib/style/components.less";',
     );
     // eslint-disable-next-line no-console
@@ -86,7 +87,7 @@ function finalizeDist() {
       `const defaultTheme = require('./default-theme.js');\n`,
     );
     // eslint-disable-next-line no-console
-    console.log('Built a entry less file to dist/antd.less');
+    console.log(`Built a entry less file to dist/${pkgName}.less`);
     buildThemeFile('default', defaultVars);
     buildThemeFile('dark', darkVars);
     buildThemeFile('compact', compactVars);
@@ -96,7 +97,7 @@ function finalizeDist() {
       `
 function getThemeVariables(options = {}) {
   let themeVar = {
-    'hack': \`true;@import "\${require.resolve('antd/lib/style/color/colorPalette.less')}";\`,
+    'hack': \`true;@import "\${require.resolve('${pkgName}/lib/style/color/colorPalette.less')}";\`,
     ...defaultTheme
   };
   if(options.dark) {
