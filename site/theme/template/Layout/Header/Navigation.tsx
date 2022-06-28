@@ -37,7 +37,12 @@ export default ({
 
   const module = pathname.split('/').slice(0, -1).join('/');
   let activeMenuItem = module || 'home';
-  if (location.pathname === 'changelog' || location.pathname === 'changelog-cn') {
+  if (
+    location.pathname === 'changelog' ||
+    location.pathname === 'changelog-cn' ||
+    location.pathname === 'changelog-gdcd' ||
+    location.pathname === 'changelog-gdcd-cn'
+  ) {
     activeMenuItem = 'docs/react';
   } else if (location.pathname === 'docs/resources' || location.pathname === 'docs/resources-cn') {
     activeMenuItem = 'docs/resources';

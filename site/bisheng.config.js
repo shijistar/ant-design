@@ -36,7 +36,12 @@ module.exports = {
   source: {
     components: './components',
     docs: './docs',
-    changelog: ['CHANGELOG.zh-CN.md', 'CHANGELOG.en-US.md'],
+    changelog: [
+      'CHANGELOG.zh-CN.md',
+      'CHANGELOG.en-US.md',
+      'CHANGELOG-GDCD.zh-CN.md',
+      'CHANGELOG-GDCD.en-US.md',
+    ],
     'components/form/v3': ['components/form/v3.zh-CN.md', 'components/form/v3.en-US.md'],
     'docs/resources': ['./docs/resources.zh-CN.md', './docs/resources.en-US.md'],
   },
@@ -109,7 +114,8 @@ module.exports = {
 
     config.plugins.push(
       new webpack.DefinePlugin({
-        antdReproduceVersion: JSON.stringify(version),
+        // codePen中还要依赖antd的正确版本号，所以要替换成antd原来的版本号
+        antdReproduceVersion: JSON.stringify(version.replace(/-\d+$/, '')),
       }),
     );
 

@@ -5,6 +5,7 @@ components/**/*.jsx
 !.*.js
 ~*
 # Docs templates
+site/theme/template
 site/theme/template/Color/ColorPicker.jsx
 site/theme/template/IconDisplay/*.js
 site/theme/template/IconDisplay/*.jsx

@@ -10,7 +10,7 @@ export default collect(async nextProps => {
   const { pathname } = nextProps.location;
   const pageDataPath = pathname.replace('-cn', '').split('/');
   const pageData = isChangelog(pathname)
-    ? nextProps.data.changelog.CHANGELOG
+    ? nextProps.data.changelog[pageDataPath[0].toUpperCase()]
     : nextProps.utils.get(nextProps.data, pageDataPath);
   if (!pageData) {
     throw 404; // eslint-disable-line no-throw-literal

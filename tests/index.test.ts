@@ -1,6 +1,7 @@
 import pkg from '../package.json';
 
 const testDist = process.env.LIB_DIR === 'dist';
+const version = pkg.version.replace(/-\d+$/, '');
 
 type AnyStyleObject = Record<PropertyKey, string | number>;
 
@@ -20,14 +21,14 @@ describe('antd dist files', () => {
       // eslint-disable-next-line global-require,import/no-unresolved
       const antd = require('../dist/antd');
       expect(antd).toBeTruthy();
-      expect(antd.version).toBe(pkg.version);
+      expect(antd.version).toBe(version);
     });
 
     it('antd.min.js should export version', () => {
       // eslint-disable-next-line global-require,import/no-unresolved
       const antd = require('../dist/antd.min');
       expect(antd).toBeTruthy();
-      expect(antd.version).toBe(pkg.version);
+      expect(antd.version).toBe(version);
     });
 
     /* eslint-disable global-require,import/no-unresolved */
