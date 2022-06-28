@@ -31,14 +31,16 @@ const packageJson = require(join(__dirname, '..', 'package.json'));
 
 const { version } = packageJson;
 
-if (!/^\d+\.\d+\.\d+$/.test(version)) {
+if (!/^\d+\.\d+\.\d+(?:-\d+)?$/.test(version)) {
   console.log('\n');
   console.log(chalk.blue('[check-version-md]: Prerelease Version. Skipped.'));
   console.log('\n');
   process.exit(0);
 }
 
-const changeLogContent = fs.readFileSync(join(__dirname, '..', 'CHANGELOG.en-US.md')).toString();
+const changeLogContent = fs
+  .readFileSync(join(__dirname, '..', 'CHANGELOG-GDCD.zh-CN.md'))
+  .toString();
 
 const changeLog = getChangelogByVersion(changeLogContent, version);
 if (!changeLog) {
@@ -57,7 +59,6 @@ if (changeLog) {
       console.log(chalk.blue('[check-version-md]: Check Passed'));
       console.log('\n');
       process.exit(0);
-      return;
     }
   }
   console.log('\n');

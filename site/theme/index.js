@@ -78,6 +78,14 @@ module.exports = {
         component: contentTmpl,
       },
       {
+        path: 'changelog-gdcd',
+        component: contentTmpl,
+      },
+      {
+        path: 'changelog-gdcd-cn',
+        component: contentTmpl,
+      },
+      {
         path: 'components/form/v3',
         component: contentTmpl,
       },

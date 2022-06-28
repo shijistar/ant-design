@@ -201,6 +201,12 @@ class Footer extends React.Component<WrappedComponentProps & { location: any }> 
           LinkComponent: Link,
         },
         {
+          icon: <HistoryOutlined />,
+          title: <FormattedMessage id="app.footer.change-log-gdcd" />,
+          url: getLink('/changelog-gdcd'),
+          LinkComponent: Link,
+        },
+        {
           icon: <ProfileOutlined />,
           title: <FormattedMessage id="app.footer.faq" />,
           url: getLink('/docs/react/faq'),

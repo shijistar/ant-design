@@ -34,6 +34,8 @@ function getModuleData(props) {
     case 'docs/react':
     case 'changelog':
     case 'changelog-cn':
+    case 'changelog-gdcd':
+    case 'changelog-gdcd-cn':
       data = [...props.picked['docs/react'], ...props.picked.changelog];
       break;
     default:
