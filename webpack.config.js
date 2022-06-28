@@ -8,6 +8,7 @@ const { ESBuildMinifyPlugin } = require('esbuild-loader');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 const darkVars = require('./scripts/dark-vars');
 const compactVars = require('./scripts/compact-vars');
+const pkgName = require('./package.json').name;
 
 const { webpack } = getWebpackConfig;
 
@@ -43,8 +44,8 @@ function ignoreMomentLocale(webpackConfig) {
 }
 
 function addLocales(webpackConfig) {
-  let packageName = 'antd-with-locales';
-  if (webpackConfig.entry['antd.min']) {
+  let packageName = `${pkgName}-with-locales`;
+  if (webpackConfig.entry[`${pkgName}.min`]) {
     packageName += '.min';
   }
   webpackConfig.entry[packageName] = './index-with-locales.js';
@@ -78,7 +79,7 @@ function processWebpackThemeConfig(themeConfig, theme, vars) {
         console.log(chalk.red('🆘 Seems entry has changed! It should be `./index`'));
       }
 
-      config.entry[entryName.replace('antd', `antd.${theme}`)] = replacedPath;
+      config.entry[entryName.replace(pkgName, `${pkgName}.${theme}`)] = replacedPath;
       delete config.entry[entryName];
     });
 
@@ -91,10 +92,10 @@ function processWebpackThemeConfig(themeConfig, theme, vars) {
         after: {
           root: './dist',
           include: [
-            `antd.${theme}.js`,
-            `antd.${theme}.js.map`,
-            `antd.${theme}.min.js`,
-            `antd.${theme}.min.js.map`,
+            `${pkgName}.${theme}.js`,
+            `${pkgName}.${theme}.js.map`,
+            `${pkgName}.${theme}.min.js`,
+            `${pkgName}.${theme}.min.js.map`,
           ],
           log: false,
           logWarning: false,
