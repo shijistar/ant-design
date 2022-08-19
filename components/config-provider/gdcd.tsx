@@ -23,4 +23,4 @@ function GDCDConfigProvider(props: ConfigProviderProps) {
   );
 }
 
-export default copyWithStatic(GDCDConfigProvider, AntConfigProvider);
+export default copyWithStatic(AntConfigProvider, GDCDConfigProvider);

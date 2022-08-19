@@ -4,6 +4,7 @@ const ignoreKeys = ['$$typeof', 'render', 'contextType', 'contextTypes'];
 const mergeKeys = ['defaultProps', 'propTypes'];
 const unoverridableKeys = ['displayName', 'getDerivedStateFromProps', 'getDerivedStateFromError'];
 
+/** 把一个Antd组件的所有静态属性拷贝到新组件中 */
 // eslint-disable-next-line import/prefer-default-export
 export const copyWithStatic = <
   PP,
@@ -11,9 +12,9 @@ export const copyWithStatic = <
   TT extends ComponentType<CP> | ForwardRefExoticComponent<CP>,
   TS extends ComponentType<PP> | ForwardRefExoticComponent<PP>,
 >(
-  target: TT,
   source: TS,
-): TT & TS => {
+  target: TT,
+): TT & { [key in keyof TS]: TS[key] } => {
   Object.keys(source).forEach(key => {
     if (ignoreKeys.includes(key)) {
       return;

@@ -153,8 +153,8 @@ export { default as Rate } from './rate';
 export type { ResultProps } from './result';
 export { default as Result } from './result';
 
-export type { RowProps } from './row';
-export { default as Row } from './row';
+export type { RowProps } from './row/gdcd';
+export { default as Row } from './row/gdcd';
 
 export type { SelectProps } from './select';
 export { default as Select } from './select';
