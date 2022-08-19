@@ -1,7 +1,7 @@
 /* eslint no-param-reassign: 0 */
 // This config is for building dist files
 const chalk = require('chalk');
-const getWebpackConfig = require('@ant-design/tools/lib/getWebpackConfig');
+const getWebpackConfig = require('gdcd-tools/lib/getWebpackConfig');
 const RemovePlugin = require('remove-files-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { ESBuildMinifyPlugin } = require('esbuild-loader');

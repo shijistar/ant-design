@@ -10,9 +10,9 @@ export type TableProps<RecordType> = AntTableProps<RecordType> & {
   /**
    * 是否纵向高度100%撑满整个父容器，同时在表格内部显示横向和纵向滚动条，默认为false
    *
+   * @memberof Props
    * @default false
    * @type {boolean}
-   * @memberof Props
    */
   fullHeight?: boolean;
 };
@@ -37,4 +37,4 @@ const ForwardTable = React.forwardRef(GDCDTable) as <RecordType extends object =
   props: React.PropsWithChildren<TableProps<RecordType>> & { ref?: React.Ref<HTMLDivElement> },
 ) => React.ReactElement;
 
-export default copyWithStatic(ForwardTable, AntTable);
+export default copyWithStatic(AntTable, ForwardTable);
