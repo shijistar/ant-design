@@ -31,9 +31,16 @@
 @table-header-bg: #f2f3f5;
 @border-color-split: #e5e6eb;
 
-@heading-color: #4e5969;
+/* 文字颜色 */
+// 强调/正文标题
 @text-color: #202a37;
+// 次强调/正文标题
+@text-color-secondary-dark: #4e5969;
+// 次要信息
 @text-color-secondary: #86909c;
+// 置灰信息
 @disabled-color: #c9cdd4;
+
+@heading-color: @text-color-secondary-dark;
 
 @form-item-margin-bottom: 20px; // 表单项下边距，设置16px的话，校验message会与下一行表单项重叠
