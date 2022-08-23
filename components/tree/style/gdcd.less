@@ -1,0 +1,13 @@
+@import '../../style/themes/index';
+@import '../../style/mixins/index';
+
+@tree-prefix-cls: ~'@{ant-prefix}-tree';
+
+.@{tree-prefix-cls} {
+  // 重写缩进尺寸，变小一些
+  &-indent {
+    &-unit {
+      width: 12px;
+    }
+  }
+}
