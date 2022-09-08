@@ -99,6 +99,8 @@ export { default as message } from './message';
 export type { ArgsProps as MessageArgsProps } from './message';
 export { default as Modal } from './modal';
 export type { ModalFuncProps, ModalProps } from './modal';
+export { default as ModalConfirm } from './modal-confirm';
+export type { ModalConfirmProps } from './modal-confirm';
 export { default as notification } from './notification';
 export { default as PageHeader } from './page-header';
 export type { PageHeaderProps } from './page-header';

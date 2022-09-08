@@ -40,6 +40,11 @@ const localeValues: Locale = {
     cancelText: 'Cancel',
     justOkText: 'OK',
   },
+  ModalConfirm: {
+    deleteModalDefaultTitle: 'Are you sure to delete?',
+    deleteModalDefaultContent: 'This operation cannot be undone, please operate with caution',
+    deleteModalDefaultSuccessText: 'Deleted successfully',
+  },
   Popconfirm: {
     okText: 'OK',
     cancelText: 'Cancel',

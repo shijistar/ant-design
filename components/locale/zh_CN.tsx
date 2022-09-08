@@ -40,6 +40,11 @@ const localeValues: Locale = {
     cancelText: '取消',
     justOkText: '知道了',
   },
+  ModalConfirm: {
+    deleteModalDefaultTitle: '确定删除？',
+    deleteModalDefaultContent: '数据删除不可逆，请谨慎操作',
+    deleteModalDefaultSuccessText: '删除成功',
+  },
   Popconfirm: {
     cancelText: '取消',
     okText: '确定',
