@@ -1,8 +1,8 @@
 ---
 type: 反馈
 category: Components
-subtitle: 🔥 模态确认框
-title: ModalConfirm
+subtitle: 模态确认框
+title: 🔥 ModalConfirm
 cover: https://gw.alipayobjects.com/zos/alicdn/3StSdUlSH/Modal.svg
 ---
 
