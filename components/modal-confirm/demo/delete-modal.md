@@ -2,9 +2,14 @@
 order: 2
 title:
   zh-CN: 删除确认框
+  en-US: 删除确认框
 ---
 
 ## zh-CN
+
+删除确认框，默认提供文字信息，使用更简洁。`title`、`content`、`successText`不使用默认值的话，也可以自己单独设置。
+
+## en-US
 
 删除确认框，默认提供文字信息，使用更简洁。`title`、`content`、`successText`不使用默认值的话，也可以自己单独设置。
 
