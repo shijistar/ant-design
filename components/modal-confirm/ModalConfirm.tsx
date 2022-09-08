@@ -51,6 +51,7 @@ const ModalConfirm: FC<ModalConfirmProps> & {
             });
           }
         }
+        modalRef.current = undefined;
       },
       onCancel: (...args: any[]) => {
         onCancel?.(...args);
