@@ -19,10 +19,15 @@ export type ModalConfirmProps = Omit<ModalFuncProps, 'onOk'> & {
   onOk?: (...args: any[]) => Promise<any> | void;
 };
 
+export type DeleteModalConfirmProps = ModalConfirmProps & {
+  /** 删除对象的名称，用于提示框的标题 */
+  name?: string;
+};
+
 /** 确认对话框，如果是删除动作的话，建议使用`ModalConfirm.Delete` */
 const ModalConfirm: FC<ModalConfirmProps> & {
   /** 删除确认框 */
-  Delete: FC<ModalConfirmProps>;
+  Delete: FC<DeleteModalConfirmProps>;
 } = props => {
   const { onOk, onCancel, successText, children, ...restProps } = props;
   const modalRef = useRef<ReturnType<typeof Modal.confirm>>();
@@ -77,16 +82,25 @@ const ModalConfirm: FC<ModalConfirmProps> & {
 };
 
 /** 删除确认框 */
-ModalConfirm.Delete = (props: ModalConfirmProps) => {
+ModalConfirm.Delete = props => {
   const { locale = defaultLocale } = useContext(ConfigContext);
 
   const {
-    title = locale.ModalConfirm?.deleteModalDefaultTitle,
+    title = replaceMessage(locale.ModalConfirm?.deleteModalDefaultTitle || '', {
+      name: props.name || locale.ModalConfirm?.deleteModalDefaultName || '',
+    }),
     content = locale.ModalConfirm?.deleteModalDefaultContent,
     successText = locale.ModalConfirm?.deleteModalDefaultSuccessText,
     ...restProps
   } = props;
   return <ModalConfirm title={title} content={content} successText={successText} {...restProps} />;
 };
+
+function replaceMessage(template: string, variables: Record<string, string>) {
+  return template.replace(/\$\{\w+\}/g, function (str) {
+    var key = str.slice(2, -1);
+    return variables[key] || '';
+  });
+}
 
 export default ModalConfirm;

@@ -41,7 +41,8 @@ const localeValues: Locale = {
     justOkText: '知道了',
   },
   ModalConfirm: {
-    deleteModalDefaultTitle: '确定删除？',
+    deleteModalDefaultName: '',
+    deleteModalDefaultTitle: '确定删除${name}？',
     deleteModalDefaultContent: '数据删除不可逆，请谨慎操作',
     deleteModalDefaultSuccessText: '删除成功',
   },

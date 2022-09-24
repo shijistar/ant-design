@@ -1,6 +1,7 @@
 import defaultLocale from '../locale/default';
 
 export interface ModalConfirmLocale {
+  deleteModalDefaultName: string;
   deleteModalDefaultTitle: string;
   deleteModalDefaultContent: string;
   deleteModalDefaultSuccessText: string;
