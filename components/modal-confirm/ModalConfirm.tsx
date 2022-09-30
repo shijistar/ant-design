@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import { useEffect, useRef, isValidElement } from 'react';
 import Modal from '../modal';
 import message from '../message';
@@ -70,15 +70,21 @@ const ModalConfirm: FC<ModalConfirmProps> & {
       modalRef.current = Modal.confirm(confirmConfig);
     }
   };
+  const clickRef = useRef<() => void>();
+  clickRef.current = handleClick;
 
-  return cloneElement(children, {
-    onClick: (e: React.KeyboardEvent<any>) => {
-      if (isValidElement(children)) {
-        children?.props.onClick?.(e);
-      }
-      handleClick();
-    },
-  });
+  const renderDom = useMemo(() => {
+    return cloneElement(children, {
+      onClick: (e: React.KeyboardEvent<any>) => {
+        if (isValidElement(children)) {
+          children?.props.onClick?.(e);
+        }
+        clickRef.current?.();
+      },
+    });
+  }, [children]);
+
+  return renderDom;
 };
 
 /** 删除确认框 */
