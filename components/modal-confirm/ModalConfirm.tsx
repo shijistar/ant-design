@@ -9,7 +9,7 @@ import defaultLocale from '../locale/en_US';
 
 export type ModalConfirmProps = Omit<ModalFuncProps, 'onOk'> & {
   /** 点击确认按钮后，请求完成后的提示消息，要求 `onOK` 方法返回一个`Promise` */
-  successText?: string;
+  successText?: string | false;
 
   /**
    * 点击确认按钮后的回调函数。
