@@ -29,6 +29,10 @@
 
           .@{table-prefix-cls}-content {
             max-height: 100%;
+            // 把容器再多撑高1px，否则会始终显示纵向滚动条
+            padding-bottom: 1px;
+            // 自动显示纵向滚动条
+            // stylelint-disable-next-line declaration-no-important
             overflow: auto !important;
 
             & > table {
