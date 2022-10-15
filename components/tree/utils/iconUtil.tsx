@@ -34,7 +34,7 @@ export default function renderSwitcherIcon(
         typeof showLeafIcon === 'function' ? showLeafIcon(treeNodeProps) : showLeafIcon;
       const leafCls = `${prefixCls}-switcher-line-custom-icon`;
 
-      if (isValidElement(leafIcon)) {
+      if (isValidElement<any>(leafIcon)) {
         return cloneElement(leafIcon, {
           className: classNames(leafIcon.props.className || '', leafCls),
         });
