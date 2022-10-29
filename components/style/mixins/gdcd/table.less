@@ -2,61 +2,75 @@
  * 把父容器整个高度撑满的表格样式，放在这里，方便引用
  * @example
  *
- * @import '../../style/mixins/gdcd/table.less';
+ * @import '../../packages/common/src/components/style/mixins/index.less';
  * .my-table {
  *   .full-height-table();
  * }
  */
-@table-prefix-cls: ~'@{ant-prefix}-table';
+.full-height-table(@fullHeight:true, @depth: 1) when(@depth <= 2) {
+  /* stylelint-disable-next-line function-no-unknown */
+  height: if((@fullHeight = true), 100%, auto);
 
-.full-height-table {
-  height: 100%;
+  :global {
+    .@{ant-prefix}-spin-nested-loading {
+      /* stylelint-disable-next-line function-no-unknown */
+      height: if((@fullHeight = true), 100%, auto);
 
-  .@{ant-prefix}-spin-nested-loading {
-    height: 100%;
+      .@{ant-prefix}-spin-container {
+        /* stylelint-disable-next-line function-no-unknown */
+        display: if((@fullHeight = true), flex, block);
+        flex-direction: column;
+        /* stylelint-disable-next-line function-no-unknown */
+        height: if((@fullHeight = true), 100%, auto);
 
-    .@{ant-prefix}-spin-container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+        .@{ant-prefix}-table:not(.@{ant-prefix}-table-empty) {
+          flex: auto;
+          min-height: 0;
 
-      .@{table-prefix-cls}:not(.@{table-prefix-cls}-empty) {
-        flex: auto;
-        height: 0;
+          .@{ant-prefix}-table-container {
+            /* stylelint-disable-next-line function-no-unknown */
+            height: if((@fullHeight = true), 100%, auto);
 
-        .@{table-prefix-cls}-container {
-          height: 100%;
+            .@{ant-prefix}-table-content {
+              /* stylelint-disable-next-line function-no-unknown */
+              max-height: if((@fullHeight = true), 100%, auto);
+              // 把容器再多撑高1px，否则会始终显示纵向滚动条
+              padding-bottom: 1px;
+              // 自动显示纵向滚动条
+              // stylelint-disable-next-line declaration-no-important
+              overflow: auto !important;
 
-          .@{table-prefix-cls}-content {
-            max-height: 100%;
-            // 把容器再多撑高1px，否则会始终显示纵向滚动条
-            padding-bottom: 1px;
-            // 自动显示纵向滚动条
-            // stylelint-disable-next-line declaration-no-important
-            overflow: auto !important;
+              & > table {
+                /* stylelint-disable-next-line function-no-unknown */
+                height: if((@fullHeight = true), 100%, auto);
 
-            & > table {
-              height: 100%;
+                .@{ant-prefix}-table-thead {
+                  position: sticky;
+                  top: 0;
+                  z-index: 10;
+                }
 
-              .@{table-prefix-cls}-thead {
-                position: sticky;
-                top: 0;
-                z-index: 10;
+                td {
+                  // 当嵌套表格时，还原所有full-height样式，防止子表格受影响
+                  .full-height-table(false, @depth + 1);
+                }
               }
             }
           }
         }
-      }
 
-      .@{table-prefix-cls}-pagination {
-        flex: none;
+        .@{ant-prefix}-table-pagination {
+          flex: none;
+        }
       }
     }
   }
 }
 
 .full-height-table-container {
-  .@{table-prefix-cls}-wrapper {
-    .full-height-table();
+  :global {
+    .@{ant-prefix}-table-wrapper {
+      .full-height-table();
+    }
   }
 }
