@@ -11,66 +11,62 @@
   /* stylelint-disable-next-line function-no-unknown */
   height: if((@fullHeight = true), 100%, auto);
 
-  :global {
-    .@{ant-prefix}-spin-nested-loading {
+  .@{ant-prefix}-spin-nested-loading {
+    /* stylelint-disable-next-line function-no-unknown */
+    height: if((@fullHeight = true), 100%, auto);
+
+    .@{ant-prefix}-spin-container {
+      /* stylelint-disable-next-line function-no-unknown */
+      display: if((@fullHeight = true), flex, block);
+      flex-direction: column;
       /* stylelint-disable-next-line function-no-unknown */
       height: if((@fullHeight = true), 100%, auto);
 
-      .@{ant-prefix}-spin-container {
-        /* stylelint-disable-next-line function-no-unknown */
-        display: if((@fullHeight = true), flex, block);
-        flex-direction: column;
-        /* stylelint-disable-next-line function-no-unknown */
-        height: if((@fullHeight = true), 100%, auto);
+      .@{ant-prefix}-table:not(.@{ant-prefix}-table-empty) {
+        flex: auto;
+        min-height: 0;
 
-        .@{ant-prefix}-table:not(.@{ant-prefix}-table-empty) {
-          flex: auto;
-          min-height: 0;
+        .@{ant-prefix}-table-container {
+          /* stylelint-disable-next-line function-no-unknown */
+          height: if((@fullHeight = true), 100%, auto);
 
-          .@{ant-prefix}-table-container {
+          .@{ant-prefix}-table-content {
             /* stylelint-disable-next-line function-no-unknown */
-            height: if((@fullHeight = true), 100%, auto);
+            max-height: if((@fullHeight = true), 100%, auto);
+            // 把容器再多撑高1px，否则会始终显示纵向滚动条
+            padding-bottom: 1px;
+            // 自动显示纵向滚动条
+            // stylelint-disable-next-line declaration-no-important
+            overflow: auto !important;
 
-            .@{ant-prefix}-table-content {
+            & > table {
               /* stylelint-disable-next-line function-no-unknown */
-              max-height: if((@fullHeight = true), 100%, auto);
-              // 把容器再多撑高1px，否则会始终显示纵向滚动条
-              padding-bottom: 1px;
-              // 自动显示纵向滚动条
-              // stylelint-disable-next-line declaration-no-important
-              overflow: auto !important;
+              height: if((@fullHeight = true), 100%, auto);
 
-              & > table {
-                /* stylelint-disable-next-line function-no-unknown */
-                height: if((@fullHeight = true), 100%, auto);
+              .@{ant-prefix}-table-thead {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+              }
 
-                .@{ant-prefix}-table-thead {
-                  position: sticky;
-                  top: 0;
-                  z-index: 10;
-                }
-
-                td {
-                  // 当嵌套表格时，还原所有full-height样式，防止子表格受影响
-                  .full-height-table(false, @depth + 1);
-                }
+              td {
+                // 当嵌套表格时，还原所有full-height样式，防止子表格受影响
+                .full-height-table(false, @depth + 1);
               }
             }
           }
         }
+      }
 
-        .@{ant-prefix}-table-pagination {
-          flex: none;
-        }
+      .@{ant-prefix}-table-pagination {
+        flex: none;
       }
     }
   }
 }
 
 .full-height-table-container {
-  :global {
-    .@{ant-prefix}-table-wrapper {
-      .full-height-table();
-    }
+  .@{ant-prefix}-table-wrapper {
+    .full-height-table();
   }
 }
