@@ -7,7 +7,7 @@ const changeName = name => {
   // eslint-disable-next-line global-require,import/no-dynamic-require
   const pkg = require(pkgFile);
   pkg.name = name;
-  writeFileSync(pkgFile, prettier.format(JSON.stringify(pkg), { filepath: pkgFile }));
+  writeFileSync(pkgFile, JSON.stringify(pkg, null, 2));
 };
 exports.changeName = changeName;
 
