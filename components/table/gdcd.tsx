@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import React from 'react';
 import { copyWithStatic } from '../_util/gdcd';
-import type { TableProps as AntTableProps } from './index';
-import AntTable from './index';
+import type { TableProps as AntTableProps } from './Table';
+import AntTable from './Table';
 
-export * from './index';
+export * from './Table';
 
 export type TableProps<RecordType> = AntTableProps<RecordType> & {
   /**

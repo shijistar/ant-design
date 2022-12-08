@@ -1,4 +1,4 @@
-import Pagination from './Pagination';
+import Pagination from './gdcd';
 
-export { PaginationConfig, PaginationProps } from './Pagination';
+export { PaginationConfig, PaginationProps } from './gdcd';
 export default Pagination;

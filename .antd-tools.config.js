@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const defaultVars = require('./scripts/default-vars');
+const gdcdVars = require('./scripts/gdcd-vars');
 const darkVars = require('./scripts/dark-vars');
 const compactVars = require('./scripts/compact-vars');
 const pkgName = require('./package.json').name;
@@ -89,6 +90,7 @@ function finalizeDist() {
     // eslint-disable-next-line no-console
     console.log(`Built a entry less file to dist/${pkgName}.less`);
     buildThemeFile('default', defaultVars);
+    buildThemeFile('gdcd', gdcdVars);
     buildThemeFile('dark', darkVars);
     buildThemeFile('compact', compactVars);
     buildThemeFile('variable', {});
@@ -112,12 +114,19 @@ function getThemeVariables(options = {}) {
       ...compactThemeSingle
     }
   }
+  if(options.gdcd) {
+    themeVar = {
+      ...themeVar,
+      ...gdcdThemeSingle
+    }
+  }
   return themeVar;
 }
 
 module.exports = {
   darkThemeSingle,
   compactThemeSingle,
+  gdcdThemeSingle,
   getThemeVariables
 }`,
       {
@@ -183,7 +192,7 @@ module.exports = {
     },
     lessConfig: {
       modifyVars: {
-        'root-entry-name': 'default',
+        'root-entry-name': pkgName,
       },
     },
     finalize: finalizeCompile,

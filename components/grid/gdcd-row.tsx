@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import type { MutableRefObject } from 'react';
 import React, { forwardRef } from 'react';
 import { copyWithStatic } from '../_util/gdcd';
-import type { RowProps as AntRowProps } from './index';
-import Row from './index';
+import type { RowProps as AntRowProps } from './row';
+import Row from './row';
 
-export * from './index';
+export * from './row';
 
 export type RowProps = AntRowProps & {
   /**
@@ -16,13 +16,13 @@ export type RowProps = AntRowProps & {
   fullWidth?: boolean;
 };
 
-const GDCDRow = (props: RowProps, ref: MutableRefObject<HTMLDivElement>) => {
+const GdcdRow = (props: RowProps, ref: MutableRefObject<HTMLDivElement>) => {
   const { className, fullWidth, ...rowProps } = props;
   return (
     <Row {...rowProps} className={classNames(className, fullWidth && 'full-width')} ref={ref} />
   );
 };
 
-const ForwardRow = forwardRef(GDCDRow);
+const ForwardRow = forwardRef(GdcdRow);
 
 export default copyWithStatic(Row, ForwardRow);

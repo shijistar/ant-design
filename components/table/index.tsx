@@ -1,4 +1,4 @@
-import Table, { TablePaginationConfig, TableProps } from './Table';
+import Table, { TablePaginationConfig, TableProps } from './gdcd';
 
 export { ColumnProps } from './Column';
 export { ColumnGroupType, ColumnsType, ColumnType } from './interface';

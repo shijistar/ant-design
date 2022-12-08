@@ -118,8 +118,8 @@ export { default as Rate } from './rate';
 export type { RateProps } from './rate';
 export { default as Result } from './result';
 export type { ResultProps } from './result';
-export { default as Row } from './row/gdcd';
-export type { RowProps } from './row/gdcd';
+export { default as Row } from './row';
+export type { RowProps } from './row';
 export { default as Segmented } from './segmented';
 export type { SegmentedProps } from './segmented';
 export { default as Select } from './select';
@@ -138,7 +138,7 @@ export { default as Steps } from './steps';
 export type { StepProps, StepsProps } from './steps';
 export { default as Switch } from './switch';
 export type { SwitchProps } from './switch';
-export { default as Table } from './table/gdcd';
+export { default as Table } from './table';
 export type {
   ColumnGroupType as TableColumnGroupType,
   ColumnProps as TableColumnProps,
@@ -146,7 +146,7 @@ export type {
   ColumnType as TableColumnType,
   TablePaginationConfig,
   TableProps,
-} from './table/gdcd';
+} from './table';
 export { default as Tabs } from './tabs';
 export type { TabPaneProps, TabsProps } from './tabs';
 export { default as Tag } from './tag';

@@ -8,6 +8,7 @@ const { ESBuildMinifyPlugin } = require('esbuild-loader');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 const darkVars = require('./scripts/dark-vars');
 const compactVars = require('./scripts/compact-vars');
+const gdcdVars = require('./scripts/gdcd-vars');
 const pkgName = require('./package.json').name;
 
 const { webpack } = getWebpackConfig;
@@ -111,6 +112,9 @@ const legacyEntryVars = {
 const webpackConfig = injectLessVariables(getWebpackConfig(false), legacyEntryVars);
 const webpackDarkConfig = injectLessVariables(getWebpackConfig(false), legacyEntryVars);
 const webpackCompactConfig = injectLessVariables(getWebpackConfig(false), legacyEntryVars);
+const webpackGdcdConfig = injectLessVariables(getWebpackConfig(false), {
+  'root-entry-name': 'gdcd',
+});
 const webpackVariableConfig = injectLessVariables(getWebpackConfig(false), {
   'root-entry-name': 'variable',
 });
@@ -152,11 +156,13 @@ if (process.env.RUN_ENV === 'PRODUCTION') {
 
   processWebpackThemeConfig(webpackDarkConfig, 'dark', darkVars);
   processWebpackThemeConfig(webpackCompactConfig, 'compact', compactVars);
+  processWebpackThemeConfig(webpackGdcdConfig, 'gdcd', gdcdVars);
   processWebpackThemeConfig(webpackVariableConfig, 'variable', {});
 }
 
 module.exports = [
   ...webpackConfig,
+  ...webpackGdcdConfig,
   ...webpackDarkConfig,
   ...webpackCompactConfig,
   ...webpackVariableConfig,
