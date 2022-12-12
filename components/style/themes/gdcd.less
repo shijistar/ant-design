@@ -1,50 +1,5 @@
 @import './default.less';
-
-@text-color-1: #ffffff;
-@text-color-2: #c9cdd4;
-@text-color-3: #86909c;
-@text-color-4: #4e5969;
-@text-color-5: #1d2129;
-
-@fill-color-1: #ffffff;
-@fill-color-2: #f7f8fa;
-@fill-color-3: #f2f3f5;
-@fill-color-4: #e5e6eb;
-@fill-color-5: #c9cdd4;
-@fill-color-6: #4e5969;
-
-@line-color-1: #f2f3f5;
-@line-color-2: #e5e6eb;
-@line-color-3: #c9cdd4;
-@line-color-4: #86909c;
-
-@neutral-color-1: #f2f3f5;
-@neutral-color-2: #dedee1;
-@neutral-color-3: #51586f;
-@neutral-color-4: #3e4660;
-@neutral-color-5: #31353f;
-@neutral-color-6: #282b33;
-
-@success-color-1: #e8ffea;
-@success-color-2: #aff0b5;
-@success-color-3: #7be188;
-@success-color-5: #23c343;
-@success-color-6: #00b42a;
-@success-color-7: #009a29;
-
-@warning-color-1: #fff7e8;
-@warning-color-2: #ffe4ba;
-@warning-color-3: #ffcf8b;
-@warning-color-5: #ff9a2e;
-@warning-color-6: #ff7d00;
-@warning-color-7: #d25f00;
-
-@error-color-1: #ffece8;
-@error-color-2: #fdcdc5;
-@error-color-3: #fbaca3;
-@error-color-5: #f76560;
-@error-color-6: #f53f3f;
-@error-color-7: #cb2634;
+@import (reference) './gdcd-vars.less';
 
 // 在下面重写变量默认值
 @blue-base: #0f64ff;
@@ -57,48 +12,69 @@
 @purple-base: #b732fa;
 @red-base: #f53649;
 
-@primary-color: #0f64ff;
-@primary-color-hover: #3d82ff;
-@primary-color-active: #0a51d1;
+@primary-color: @blue-base;
 
-@success-color: #00b42a;
-@success-color-hover: #23c343;
-@success-color-active: #009a29;
+@success-color: @success-color-6;
+@success-color-hover: @success-color-5;
+@success-color-active: @success-color-7;
 
-@warning-color: #f99057;
-@warning-color-hover: #ff9a2e;
-@warning-color-active: #d25f00;
+@warning-color: @warning-color-6;
+@warning-color-hover: @warning-color-5;
+@warning-color-active: @warning-color-7;
 
-@error-color: #f53f3f;
-@error-color-hover: #f76560;
-@error-color-active: #cb2634;
-
-@layout-sider-background: #31353f;
-
-@table-header-bg: @fill-color-3;
-@border-color-split: @fill-color-4;
+@error-color: @error-color-6;
+@error-color-hover: @error-color-5;
+@error-color-active: @error-color-7;
+@error-color-deprecated-bg: @error-color-1;
+@error-color-deprecated-border: @error-color-2;
 
 /* 文字颜色 */
-// 强调/正文/标题
+// 正文
 @text-color: @text-color-5;
-// 次强调/正文标题
-@text-color-title: @text-color-4;
 // 次要信息
 @text-color-secondary: @text-color-3;
+// 标题颜色
+@heading-color: @text-color-5;
 // 置灰信息
 @disabled-color: @text-color-2;
-@disabled-bg: @fill-color-2;
-
-/* 背景色 */
+@disabled-bg: @fill-color-3;
+// 选择文本
+@text-selection-bg: @blue-5;
+// 背景色
 @background-color-light: @fill-color-2;
 @background-color-base: @fill-color-3;
 
-@heading-color: @text-color-title;
+/* 字体 */
+// ---
+@font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, 'PingFang SC',
+  'Hiragino Sans GB', 'Microsoft Yahei', STHeiti, SimSun, sans-serif;
+@code-family: 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', Courier, monospace;
 
-/* Form */
-@form-item-margin-bottom: 20px; // 表单项下边距，设置16px的话，校验message会与下一行表单项重叠
+/* Layout */
+// ---
+@layout-sider-background: @neutral-color-5;
+@layout-header-background-dark-color: @neutral-color-6;
+
+/* Table */
+// ---
+@table-header-bg: @fill-color-3;
+@border-color-split: @fill-color-4;
 
 /* Pagination */
+// ---
 @pagination-item-link-bg: @fill-color-3;
 @pagination-item-bg: @fill-color-3;
 @pagination-item-bg-active: @primary-color;
+
+/* Form */
+// ---
+@form-item-margin-bottom: 20px; // 表单项下边距，设置16px的话，校验message会与下一行表单项重叠
+@label-color: @text-color-4;
+
+/* Descriptions */
+// ---
+@descriptions-item-label-color: @text-color-4;
+
+// Steps
+// ---
+@steps-title-line-height: @line-height-base;

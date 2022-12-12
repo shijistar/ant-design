@@ -7,8 +7,9 @@ import * as React from 'react';
 import { ConfigContext } from '../config-provider';
 import useBreakpoint from '../grid/hooks/useBreakpoint';
 import Progress from '../progress';
+import { copyWithStatic } from '../_util/gdcd';
 
-export interface StepsProps {
+interface AntStepsProps {
   type?: 'default' | 'navigation';
   className?: string;
   current?: number;
@@ -26,6 +27,10 @@ export interface StepsProps {
   onChange?: (current: number) => void;
   children?: React.ReactNode;
 }
+export type StepsProps = AntStepsProps & {
+  /** StepItem之间的最大间距，像素 */
+  maxGap?: number;
+};
 
 export interface StepProps {
   className?: string;
@@ -120,4 +125,50 @@ const Steps: StepsType = props => {
 
 Steps.Step = RcSteps.Step;
 
-export default Steps;
+const GDCDSteps: React.FC<StepsProps> = props => {
+  const { maxGap, className, style, children, ...antProps } = props;
+  const { getPrefixCls } = React.useContext(ConfigContext);
+  const childCount = React.useMemo(() => {
+    return React.Children.toArray(children).filter(
+      child => React.isValidElement(child) && child.type === Steps.Step,
+    ).length;
+  }, [children]);
+  const isMaxWidthMode = maxGap && childCount;
+
+  // 给title和description添加title属性
+  const [childSteps, setChildSteps] = React.useState<React.ReactNode[]>();
+  React.useEffect(() => {
+    setChildSteps(
+      React.Children.toArray(children).map(child => {
+        if (React.isValidElement(child) && child.type === Steps.Step) {
+          const { title, description } = child.props;
+          return React.cloneElement(child, {
+            ...child.props,
+            title: title && <span title={title}>{title}</span>,
+            description: description && <span title={description}>{description}</span>,
+          });
+        } else {
+          return child;
+        }
+      }),
+    );
+  }, [children]);
+
+  return (
+    <Steps
+      className={classNames(
+        className,
+        isMaxWidthMode && getPrefixCls('steps-max-width-mode', antProps.prefixCls),
+      )}
+      style={{
+        ...style,
+        // 116 = 最末步骤的宽度（见style/label-placement.less）
+        maxWidth: maxGap && childCount ? maxGap * (childCount - 1) + 116 : undefined,
+      }}
+      children={childSteps}
+      {...antProps}
+    />
+  );
+};
+
+export default copyWithStatic(Steps, GDCDSteps);

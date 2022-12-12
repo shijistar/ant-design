@@ -1,0 +1,20 @@
+/** 
+ * 文本溢出时自动省略号
+ */
+.ellipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/** 
+ * 文本最多显示N行，溢出时自动省略号
+ */
+.row-ellipsis(@rows: 1) {
+  /* stylelint-disable-next-line value-no-vendor-prefix */
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: @rows;
+  -webkit-box-orient: vertical;
+}

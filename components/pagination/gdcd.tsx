@@ -11,7 +11,7 @@ const defaultLocale: PaginationLocale = {
 
 export type PaginationProps = AntPaginationProps;
 
-const GdcdPagination: FC<PaginationProps> = (props: PaginationProps) => {
+const GDCDPagination: FC<PaginationProps> = (props: PaginationProps) => {
   const {
     defaultPageSize = 20,
     size = 'default',
@@ -36,4 +36,4 @@ const GdcdPagination: FC<PaginationProps> = (props: PaginationProps) => {
   );
 };
 
-export default copyWithStatic(AntPagination, GdcdPagination);
+export default copyWithStatic(AntPagination, GDCDPagination);

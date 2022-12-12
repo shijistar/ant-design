@@ -16,13 +16,13 @@ export type RowProps = AntRowProps & {
   fullWidth?: boolean;
 };
 
-const GdcdRow = (props: RowProps, ref: MutableRefObject<HTMLDivElement>) => {
+const GDCDRow = (props: RowProps, ref: MutableRefObject<HTMLDivElement>) => {
   const { className, fullWidth, ...rowProps } = props;
   return (
     <Row {...rowProps} className={classNames(className, fullWidth && 'full-width')} ref={ref} />
   );
 };
 
-const ForwardRow = forwardRef(GdcdRow);
+const ForwardRow = forwardRef(GDCDRow);
 
 export default copyWithStatic(Row, ForwardRow);

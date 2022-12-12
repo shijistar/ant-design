@@ -9,11 +9,19 @@ const path = require('path');
 const lessToJs = require('less-vars-to-js');
 
 const stylePath = path.join(__dirname, '..', 'components', 'style');
-const darkLess = fs.readFileSync(path.join(stylePath, 'themes', 'gdcd.less'), 'utf8');
+const gdcdVarsLess = fs.readFileSync(path.join(stylePath, 'themes', 'gdcd-vars.less'), 'utf8');
+const gdcdLess = fs.readFileSync(path.join(stylePath, 'themes', 'gdcd.less'), 'utf8');
 
-const gdcdPaletteLess = lessToJs(darkLess, {
+const gdcdVarsPaletteLess = lessToJs(gdcdVarsLess, {
+  stripPrefix: true,
+  resolveVariables: false,
+});
+const gdcdPaletteLess = lessToJs(gdcdLess, {
   stripPrefix: true,
   resolveVariables: false,
 });
 
-module.exports = gdcdPaletteLess;
+module.exports = {
+  ...gdcdVarsPaletteLess,
+  ...gdcdPaletteLess,
+};

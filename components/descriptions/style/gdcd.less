@@ -1,0 +1,11 @@
+@import '../../style/themes/index';
+@import '../../style/mixins/index';
+
+@descriptions-prefix-cls: ~'@{ant-prefix}-descriptions';
+@descriptions-item-label-color: @text-color;
+
+.@{descriptions-prefix-cls} {
+  &-item-label {
+    color: @descriptions-item-label-color;
+  }
+}
