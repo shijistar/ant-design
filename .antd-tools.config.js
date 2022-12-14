@@ -99,7 +99,7 @@ function finalizeDist() {
       `
 function getThemeVariables(options = {}) {
   let themeVar = {
-    'hack': \`true;@import "\${require.resolve('${pkgName}/lib/style/color/colorPalette.less')}";\`,
+    'hack': \`true;@import "\${require.resolve('gdcd/lib/style/color/colorPalette.less')}";\`,
     ...defaultTheme
   };
   if(options.dark) {

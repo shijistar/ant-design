@@ -10,6 +10,7 @@ import LocaleReceiver from '../locale-provider/LocaleReceiver';
 import defaultLocale from '../locale/default';
 import message from '../message';
 import notification from '../notification';
+import { copyWithStatic } from '../_util/gdcd';
 import type { Theme } from './context';
 import {
   ConfigConsumer,
@@ -56,7 +57,7 @@ const PASSED_PROPS: Exclude<keyof ConfigConsumerProps, 'rootPrefixCls' | 'getPre
   'form',
 ];
 
-export interface ConfigProviderProps {
+export interface AntConfigProviderProps {
   getTargetContainer?: () => HTMLElement | Window;
   getPopupContainer?: (triggerNode?: HTMLElement) => HTMLElement;
   prefixCls?: string;
@@ -300,4 +301,23 @@ ConfigProvider.ConfigContext = ConfigContext;
 ConfigProvider.SizeContext = SizeContext;
 ConfigProvider.config = setGlobalConfig;
 
-export default ConfigProvider;
+// export default ConfigProvider;
+
+export type ConfigProviderProps = AntConfigProviderProps;
+
+function GDCDConfigProvider(props: ConfigProviderProps) {
+  const { children, iconPrefixCls, csp, ...antdProps } = props;
+
+  const memoIconContextValue = React.useMemo(
+    () => ({ prefixCls: iconPrefixCls, csp }),
+    [iconPrefixCls, csp],
+  );
+
+  return (
+    <ConfigProvider iconPrefixCls={iconPrefixCls} csp={csp} {...antdProps}>
+      <IconContext.Provider value={memoIconContextValue}>{children}</IconContext.Provider>
+    </ConfigProvider>
+  );
+}
+
+export default copyWithStatic(ConfigProvider, GDCDConfigProvider);
