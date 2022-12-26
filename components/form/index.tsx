@@ -2,7 +2,7 @@ import { Rule, RuleObject, RuleRender } from 'rc-field-form/lib/interface';
 import warning from '../_util/warning';
 import { FormProvider } from './context';
 import ErrorList, { ErrorListProps } from './ErrorList';
-import InternalForm, { FormInstance, FormProps, useForm, useWatch } from './Form';
+import InternalForm, { FormInstance, FormProps, useForm, useWatch } from './Form.gdcd';
 import Item, { FormItemProps } from './FormItem';
 import List, { FormListFieldData, FormListOperation, FormListProps } from './FormList';
 import useFormInstance from './hooks/useFormInstance';
