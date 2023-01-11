@@ -7,12 +7,10 @@ export * from './Form';
 
 export type FormProps<Values = any> = AntFormProps<Values>;
 
-function GDCDForm<Values = any>(
-  props: React.PropsWithChildren<FormProps<Values>> & { ref?: React.Ref<FormInstance<Values>> },
-) {
-  const { autoComplete = 'off', ref, ...antdProps } = props;
-  return <AntForm<Values> autoComplete={autoComplete} {...antdProps} ref={ref} />;
-}
+const GDCDForm: React.ForwardRefRenderFunction<FormInstance, FormProps> = (props, ref) => {
+  const { autoComplete = 'off', ...antdProps } = props;
+  return <AntForm autoComplete={autoComplete} {...antdProps} ref={ref} />;
+};
 
 const ForwardForm = React.forwardRef(GDCDForm) as <Values = any>(
   props: React.PropsWithChildren<FormProps<Values>> & { ref?: React.Ref<FormInstance<Values>> },
