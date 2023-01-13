@@ -28,7 +28,7 @@ const LocaleReceiver = <C extends LocaleComponentName = LocaleComponentName>(
     return {
       ...(locale instanceof Function ? locale() : locale),
       ...(localeFromContext || {}),
-    };
+    } as NonNullable<Locale[C]>;
   }, [componentName, defaultLocale, antLocale]);
 
   const getLocaleCode = React.useMemo<string>(() => {
