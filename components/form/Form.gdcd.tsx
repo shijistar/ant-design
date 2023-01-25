@@ -9,6 +9,7 @@ export type FormProps<Values = any> = AntFormProps<Values>;
 
 const GDCDForm: React.ForwardRefRenderFunction<FormInstance, FormProps> = (props, ref) => {
   const { autoComplete = 'off', ...antdProps } = props;
+  // @ts-ignore
   return <AntForm autoComplete={autoComplete} {...antdProps} ref={ref} />;
 };
 

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useMemo } from 'react';
+import React, { FC, ReactNode, useContext, useMemo } from 'react';
 import { useEffect, useRef, isValidElement } from 'react';
 import Modal from '../modal';
 import message from '../message';
@@ -17,6 +17,8 @@ export type ModalConfirmProps = Omit<ModalFuncProps, 'onOk'> & {
    * 如果返回Promise，则会在Promise完成后自动提示成功消息
    */
   onOk?: (...args: any[]) => Promise<any> | void;
+
+  children: ReactNode;
 };
 
 export type DeleteModalConfirmProps = ModalConfirmProps & {
