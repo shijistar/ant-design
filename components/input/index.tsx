@@ -3,13 +3,13 @@ import Group from './Group';
 import type { InputProps, InputRef } from './Input';
 import InternalInput from './Input';
 import Password from './Password';
-import Search from './Search';
+import Search from './Search-gdcd';
 import TextArea from './TextArea';
 
 export { GroupProps } from './Group';
 export { InputProps, InputRef } from './Input';
 export { PasswordProps } from './Password';
-export { SearchProps } from './Search';
+export { SearchProps } from './Search-gdcd';
 export { TextAreaProps } from './TextArea';
 
 interface CompoundedComponent

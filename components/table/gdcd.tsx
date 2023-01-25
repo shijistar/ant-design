@@ -21,10 +21,19 @@ function GDCDTable<RecordType extends object = any>(
   props: TableProps<RecordType>,
   ref: React.MutableRefObject<HTMLDivElement>,
 ) {
-  const { ...antdProps } = props;
+  const { pagination, ...antdProps } = props;
+
+  let newPagination = pagination;
+  if (typeof pagination === 'object') {
+    newPagination = {
+      ...pagination,
+      defaultPageSize: pagination.defaultPageSize || 20,
+    };
+  }
   return (
     <AntTable
       {...antdProps}
+      pagination={newPagination}
       className={classNames(props.className, {
         'full-height-table': !!props.fullHeight,
       })}
