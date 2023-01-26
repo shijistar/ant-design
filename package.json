@@ -177,7 +177,7 @@
     "@types/lodash": "^4.14.139",
     "@types/puppeteer": "^5.4.0",
     "@types/qs": "^6.9.7",
-    "@types/react": "^18.0.0",
+    "@types/react": "^17.0.0",
     "@types/react-color": "^3.0.1",
     "@types/react-copy-to-clipboard": "^5.0.0",
     "@types/react-dom": "^18.0.0",
