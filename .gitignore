@@ -21,6 +21,7 @@ GIT_HEAD
 node_modules/
 .buildpath
 .settings
+.yarn
 npm-debug.log
 nohup.out
 _site
