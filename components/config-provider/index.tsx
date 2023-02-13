@@ -1,4 +1,4 @@
-import IconContext from '@ant-design/icons/lib/components/Context';
+import IconContext from '@ant-design/icons/es/components/Context';
 import { FormProvider as RcFormProvider } from 'rc-field-form';
 import type { ValidateMessages } from 'rc-field-form/lib/interface';
 import useMemo from 'rc-util/lib/hooks/useMemo';
@@ -306,16 +306,24 @@ ConfigProvider.config = setGlobalConfig;
 export type ConfigProviderProps = AntConfigProviderProps;
 
 function GDCDConfigProvider(props: ConfigProviderProps) {
-  const { children, iconPrefixCls, csp, ...antdProps } = props;
+  const parentContext = React.useContext(ConfigContext);
+  const parentIconContext = React.useContext(IconContext);
+  const {
+    children,
+    prefixCls = parentContext.getPrefixCls(),
+    iconPrefixCls = parentIconContext.prefixCls,
+    ...antdProps
+  } = props;
+  const csp = props.csp;
 
-  const memoIconContextValue = React.useMemo(
+  const iconContext = React.useMemo(
     () => ({ prefixCls: iconPrefixCls, csp }),
     [iconPrefixCls, csp],
   );
 
   return (
-    <ConfigProvider iconPrefixCls={iconPrefixCls} csp={csp} {...antdProps}>
-      <IconContext.Provider value={memoIconContextValue}>{children}</IconContext.Provider>
+    <ConfigProvider prefixCls={prefixCls} iconPrefixCls={iconPrefixCls} {...antdProps}>
+      <IconContext.Provider value={iconContext}>{children}</IconContext.Provider>
     </ConfigProvider>
   );
 }
