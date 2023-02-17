@@ -1,12 +1,15 @@
 import classNames from 'classnames';
 import React from 'react';
 import { copyWithStatic } from '../_util/gdcd';
+import { GetRowKey } from './interface';
 import type { TableProps as AntTableProps } from './Table';
 import AntTable from './Table';
 
 export * from './Table';
 
-export type TableProps<RecordType> = AntTableProps<RecordType> & {
+export type TableProps<RecordType> = Omit<AntTableProps<RecordType>, 'rowKey'> & {
+  /** RowKey必填，防止界面不更新的问题 */
+  rowKey: string | GetRowKey<RecordType>;
   /**
    * 是否纵向高度100%撑满整个父容器，同时在表格内部显示横向和纵向滚动条，默认为false
    *
