@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { copyWithStatic } from '../_util/gdcd';
 import { GetRowKey } from './interface';
+import { ConfigContext } from '../config-provider';
 import type { TableProps as AntTableProps } from './Table';
 import AntTable from './Table';
 
@@ -25,6 +26,7 @@ function GDCDTable<RecordType extends object = any>(
   ref: React.MutableRefObject<HTMLDivElement>,
 ) {
   const { pagination, ...antdProps } = props;
+  const { getPrefixCls } = React.useContext(ConfigContext);
 
   let newPagination = pagination;
   if (typeof pagination === 'object') {
@@ -38,7 +40,7 @@ function GDCDTable<RecordType extends object = any>(
       {...antdProps}
       pagination={newPagination}
       className={classNames(props.className, {
-        'full-height-table': !!props.fullHeight,
+        [getPrefixCls('table-full-height')]: !!props.fullHeight,
       })}
       ref={ref}
     />
