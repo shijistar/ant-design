@@ -10,6 +10,7 @@ import defaultLocale from '../locale/en_US';
 export type ModalConfirmProps = Omit<ModalFuncProps, 'onOk'> & {
   /** 点击确认按钮后，请求完成后的提示消息，要求 `onOK` 方法返回一个`Promise` */
   successText?: string | false;
+  errorText?: string | false;
 
   /**
    * 点击确认按钮后的回调函数。
@@ -31,7 +32,7 @@ const ModalConfirm: FC<ModalConfirmProps> & {
   /** 删除确认框 */
   Delete: FC<DeleteModalConfirmProps>;
 } = props => {
-  const { onOk, onCancel, successText, children, ...restProps } = props;
+  const { onOk, onCancel, successText, errorText, children, ...restProps } = props;
   const modalRef = useRef<ReturnType<typeof Modal.confirm>>();
 
   // 组件销毁时也销毁对话框
@@ -46,16 +47,17 @@ const ModalConfirm: FC<ModalConfirmProps> & {
   // 点击children时，打开对话框
   const handleClick = () => {
     const confirmConfig = {
-      onOk: (...args: any[]) => {
+      onOk: async (...args: any[]) => {
         if (onOk) {
-          const result = onOk(...args);
-          if (result) {
-            // 如果返回Promise，则提示成功消息
-            result.then(() => {
-              if (successText) {
-                message.success(successText);
-              }
-            });
+          try {
+            await onOk(...args);
+            if (successText) {
+              message.success(successText);
+            }
+          } catch (e) {
+            if (errorText) {
+              message.error(errorText);
+            }
           }
         }
         modalRef.current = undefined;
