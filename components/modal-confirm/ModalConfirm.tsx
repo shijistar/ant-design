@@ -1,11 +1,11 @@
 import React, { FC, ReactNode, useContext, useMemo } from 'react';
-import { useEffect, useRef, isValidElement } from 'react';
-import Modal from '../modal';
+import { useRef, isValidElement } from 'react';
 import message from '../message';
 import type { ModalFuncProps } from '../modal';
 import { cloneElement } from '../_util/reactNode';
 import { ConfigContext } from '../config-provider';
 import defaultLocale from '../locale/en_US';
+import useModal from '../modal/useModal';
 
 export type ModalConfirmProps = Omit<ModalFuncProps, 'onOk'> & {
   /** 点击确认按钮后，请求完成后的提示消息，要求 `onOK` 方法返回一个`Promise` */
@@ -15,7 +15,7 @@ export type ModalConfirmProps = Omit<ModalFuncProps, 'onOk'> & {
   /**
    * 点击确认按钮后的回调函数。
    *
-   * 如果返回Promise，则会在Promise完成后自动提示成功消息
+   * 如果返回Promise，则会在Promise完成后自动提示成功消息。如果失败，则会提示`errorText`，如果没有设置`errorText`，则不提示。
    */
   onOk?: (...args: any[]) => Promise<any> | void;
 
@@ -33,16 +33,7 @@ const ModalConfirm: FC<ModalConfirmProps> & {
   Delete: FC<DeleteModalConfirmProps>;
 } = props => {
   const { onOk, onCancel, successText, errorText, children, ...restProps } = props;
-  const modalRef = useRef<ReturnType<typeof Modal.confirm>>();
-
-  // 组件销毁时也销毁对话框
-  useEffect(() => {
-    return () => {
-      if (modalRef.current) {
-        modalRef.current.destroy();
-      }
-    };
-  }, []);
+  const [modal, holder] = useModal();
 
   // 点击children时，打开对话框
   const handleClick = () => {
@@ -60,19 +51,13 @@ const ModalConfirm: FC<ModalConfirmProps> & {
             }
           }
         }
-        modalRef.current = undefined;
       },
       onCancel: (...args: any[]) => {
         onCancel?.(...args);
-        modalRef.current = undefined;
       },
       ...restProps,
     };
-    if (modalRef.current) {
-      modalRef.current.update(confirmConfig);
-    } else {
-      modalRef.current = Modal.confirm(confirmConfig);
-    }
+    modal.confirm(confirmConfig);
   };
   const clickRef = useRef<() => void>();
   clickRef.current = handleClick;
@@ -88,7 +73,12 @@ const ModalConfirm: FC<ModalConfirmProps> & {
     });
   }, [children]);
 
-  return renderDom;
+  return (
+    <>
+      {renderDom}
+      {holder}
+    </>
+  );
 };
 
 /** 删除确认框 */

@@ -28,6 +28,7 @@ cover: https://gw.alipayobjects.com/zos/alicdn/3StSdUlSH/Modal.svg
 | closable | 是否显示右上角的关闭按钮 | boolean | false | 4.9.0 |
 | closeIcon | 自定义关闭图标 | ReactNode | undefined | 4.9.0 |
 | content | 内容 | ReactNode | - |  |
+| 🔥 errorText | 操作失败后的提示消息，要求`onOK`返回 promise，不设置则不提示 | string | - |  |
 | getContainer | 指定 Modal 挂载的 HTML 节点, false 为挂载在当前 dom | HTMLElement \| () => HTMLElement \| Selectors \| false | document.body |  |
 | icon | 自定义图标 | ReactNode | &lt;QuestionCircle /> |  |
 | keyboard | 是否支持键盘 esc 关闭 | boolean | true |  |
@@ -44,4 +45,4 @@ cover: https://gw.alipayobjects.com/zos/alicdn/3StSdUlSH/Modal.svg
 | wrapClassName | 对话框外层容器的类名 | string | - | 4.18.0 |
 | zIndex | 设置 Modal 的 `z-index` | number | 1000 |  |
 | onCancel | 取消回调，参数为关闭函数，返回 promise 时 resolve 后自动关闭 | function(close) | - |  |
-| 🔥 onOk | 点击确定回调，参数为关闭函数，返回 promise 时 resolve 后自动关闭，并自动弹出`successText`提示消息 | function(close) | - |  |
+| 🔥 onOk | 点击确定回调，参数为关闭函数，返回 promise 时 如果成功则弹出`successText`提示消息，如果失败则弹出`errorText` | function(close) | - |  |
