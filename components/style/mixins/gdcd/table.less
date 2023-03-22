@@ -23,12 +23,15 @@
       height: if((@fullHeight = true), 100%, auto);
 
       .@{ant-prefix}-table:not(.@{ant-prefix}-table-empty) {
+        display: flex;
         flex: auto;
+        flex-direction: column;
+        width: 100%;
         min-height: 0;
 
         .@{ant-prefix}-table-container {
-          /* stylelint-disable-next-line function-no-unknown */
-          height: if((@fullHeight = true), 100%, auto);
+          flex: auto;
+          min-height: 0;
 
           .@{ant-prefix}-table-content {
             /* stylelint-disable-next-line function-no-unknown */
