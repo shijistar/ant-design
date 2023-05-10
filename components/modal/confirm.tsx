@@ -1,7 +1,7 @@
-import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
-import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
-import ExclamationCircleOutlined from '@ant-design/icons/ExclamationCircleOutlined';
-import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
+import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
+import CloseCircleFilled from '@ant-design/icons/CloseCircleFilled';
+import ExclamationCircleFilled from '@ant-design/icons/ExclamationCircleFilled';
+import InfoCircleFilled from '@ant-design/icons/InfoCircleFilled';
 import { render as reactRender, unmount as reactUnmount } from 'rc-util/lib/React/render';
 import * as React from 'react';
 import { globalConfig } from '../config-provider';
@@ -121,7 +121,7 @@ export default function confirm(config: ModalFuncProps) {
 
 export function withWarn(props: ModalFuncProps): ModalFuncProps {
   return {
-    icon: <ExclamationCircleOutlined />,
+    icon: <ExclamationCircleFilled />,
     okCancel: false,
     ...props,
     type: 'warning',
@@ -130,7 +130,7 @@ export function withWarn(props: ModalFuncProps): ModalFuncProps {
 
 export function withInfo(props: ModalFuncProps): ModalFuncProps {
   return {
-    icon: <InfoCircleOutlined />,
+    icon: <InfoCircleFilled />,
     okCancel: false,
     ...props,
     type: 'info',
@@ -139,7 +139,7 @@ export function withInfo(props: ModalFuncProps): ModalFuncProps {
 
 export function withSuccess(props: ModalFuncProps): ModalFuncProps {
   return {
-    icon: <CheckCircleOutlined />,
+    icon: <CheckCircleFilled />,
     okCancel: false,
     ...props,
     type: 'success',
@@ -148,7 +148,7 @@ export function withSuccess(props: ModalFuncProps): ModalFuncProps {
 
 export function withError(props: ModalFuncProps): ModalFuncProps {
   return {
-    icon: <CloseCircleOutlined />,
+    icon: <CloseCircleFilled />,
     okCancel: false,
     ...props,
     type: 'error',
@@ -157,7 +157,7 @@ export function withError(props: ModalFuncProps): ModalFuncProps {
 
 export function withConfirm(props: ModalFuncProps): ModalFuncProps {
   return {
-    icon: <ExclamationCircleOutlined />,
+    icon: <ExclamationCircleFilled />,
     okCancel: true,
     ...props,
     type: 'confirm',
