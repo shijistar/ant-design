@@ -2,11 +2,14 @@
 @import '../../style/mixins/index';
 
 @pagination-prefix-cls: ~'@{ant-prefix}-pagination';
+@pagination-total-color: @text-color;
 
 .@{pagination-prefix-cls} {
-  &-item {
-    border-width: 0;
+  &-total-text {
+    color: @pagination-total-color;
+  }
 
+  &-item {
     &-active {
       // 当前页码块的背景色
       a {
@@ -30,37 +33,6 @@
     // 去掉前后翻页按钮的边框
     .@{pagination-prefix-cls}-item-link {
       border-width: 0;
-    }
-  }
-
-  &-options {
-    // pageSize下拉框背景色
-    &-size-changer.@{ant-prefix}-select {
-      .@{ant-prefix}-select-selector {
-        background-color: @fill-color-3;
-      }
-    }
-
-    // 跳页输入框背景色
-    &-quick-jumper {
-      input {
-        background-color: @fill-color-3;
-      }
-    }
-  }
-
-  // mini模式下不修改背景色
-  &&-mini &-options {
-    &-size-changer.@{ant-prefix}-select {
-      .@{ant-prefix}-select-selector {
-        background-color: transparent;
-      }
-    }
-
-    &-quick-jumper {
-      input {
-        background-color: transparent;
-      }
     }
   }
 }
