@@ -9,7 +9,9 @@ const defaultLocale: PaginationLocale = {
   jump_to: '前往',
 };
 
-export type PaginationProps = AntPaginationProps;
+export type PaginationProps = Omit<AntPaginationProps, 'showTotal'> & {
+  showTotal?: AntPaginationProps['showTotal'] | false;
+};
 
 const GDCDPagination: FC<PaginationProps> = (props: PaginationProps) => {
   const {
@@ -26,7 +28,7 @@ const GDCDPagination: FC<PaginationProps> = (props: PaginationProps) => {
       defaultPageSize={defaultPageSize}
       showSizeChanger={showSizeChanger}
       showQuickJumper={showQuickJumper}
-      showTotal={showTotal}
+      showTotal={showTotal || undefined}
       {...antdProps}
     />
   );

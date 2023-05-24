@@ -35,7 +35,7 @@ cover: https://gw.alipayobjects.com/zos/alicdn/1vqv2bj68/Pagination.svg
 | showQuickJumper | 是否可以快速跳转至某页 | boolean \| { goButton: ReactNode } | false |  |
 | showSizeChanger | 是否展示 `pageSize` 切换器，当 `total` 大于 50 时默认为 true | boolean | - |  |
 | showTitle | 是否显示原生 tooltip 页码提示 | boolean | true |  |
-| showTotal | 用于显示数据总量和当前数据顺序 | function(total, range) | - |  |
+| showTotal | 用于显示数据总量和当前数据顺序 | function(total, range) \| false | - |  |
 | simple | 当添加该属性时，显示为简单分页 | boolean | - |  |
 | size | 当为 `small` 时，是小尺寸分页 | `default` \| `small` | `default` |  |
 | total | 数据总数 | number | 0 |  |
