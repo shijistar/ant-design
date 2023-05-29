@@ -8278,10 +8278,10 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-gdcd-tools@15.2.0-9:
-  version "15.2.0-9"
-  resolved "https://gdc-dev.glodon.com/npm/gdcd-tools/-/gdcd-tools-15.2.0-9.tgz"
-  integrity sha512-i3qLmZ2ETor3al6s0mnSaHhYZhIl9N6OXbRmSWxAKYrGzWLb7sOoQJHAbsirxkTANSPyaRpPtikScx1l84FrLQ==
+gdcd-tools@15.2.0-11:
+  version "15.2.0-11"
+  resolved "https://gdc-dev.glodon.com/npm/gdcd-tools/-/gdcd-tools-15.2.0-11.tgz#17f28a846293ae9e39ea141b556840d32d7158f0"
+  integrity sha512-Y77F+kUYYYG8grBCs6mMf9T+2X85hIW22c9jyF7CqxZ4D76GU9BDS9iktJkhqYCyl9z8juRP2yMr8/P4NJnhyw==
   dependencies:
     "@babel/core" "^7.4.5"
     "@babel/plugin-proposal-class-properties" "^7.4.4"
