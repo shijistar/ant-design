@@ -1,13 +1,13 @@
 ---
-order: -99
+order: -1
 title:
-  en-US: 🔥 Full height table
-  zh-CN: 🔥 全高度表格
+  en-US: 🔥 Resizable Table
+  zh-CN: 🔥 可调节列宽
 ---
 
 ## zh-CN
 
-全高度表格，高度撑满父容器的 100%，在内部自动出现横向、纵向滚动条。
+可拖拽调节列宽，列宽可以为空，自适应弹性布局。`resizable` 不可与 `fixed` 锁定列同时使用，效果十分诡异。
 
 ```tsx
 import { Space, Table, Tag } from 'antd';
@@ -28,8 +28,7 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'name',
     key: 'name',
     render: text => <a>{text}</a>,
-    fixed: 'left',
-    width: 50,
+    width: 150,
   },
   {
     title: 'Age',
@@ -41,7 +40,6 @@ const columns: ColumnsType<DataType> = [
     title: 'Address',
     dataIndex: 'address',
     key: 'address',
-    width: 200,
   },
   {
     title: 'Tags',
@@ -62,18 +60,6 @@ const columns: ColumnsType<DataType> = [
           );
         })}
       </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    fixed: 'right',
-    width: 70,
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
     ),
   },
 ];
@@ -138,13 +124,7 @@ const data: DataType[] = [
 ];
 
 const App: React.FC = () => (
-  <Table
-    columns={columns}
-    dataSource={data}
-    fullHeight
-    scroll={{ x: 1800 }}
-    style={{ height: '300px' }}
-  />
+  <Table resizable fullHeight columns={columns} dataSource={data} style={{ height: 300 }} />
 );
 
 export default App;

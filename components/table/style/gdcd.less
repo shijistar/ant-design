@@ -46,4 +46,93 @@
       }
     }
   }
+
+  // ========================= Placeholder ==========================
+  &.@{table-prefix-cls}-empty {
+    tr.@{table-prefix-cls}-placeholder {
+      & > td {
+        // 防止无数据时，出现横向滚动条
+        // 原因是：.expanded-row-fixed 宽度设置为table的宽度，但是多了2px，是表格自身的border，所以会出现横向滚动条
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+.@{table-prefix-cls}-resizable {
+  .@{table-prefix-cls}-cell.react-resizable.react-resizable {
+    position: relative;
+
+    .@{table-prefix-cls}-filter-column {
+      .@{table-prefix-cls}-filter-trigger {
+        margin: -4px 2px -4px 0;
+      }
+    }
+
+    & > .@{table-prefix-cls}-column-sorters {
+      margin-right: 6px;
+    }
+
+    .react-resizable-handle {
+      position: absolute;
+      top: 50%;
+      right: 3px;
+      left: auto;
+      z-index: 1;
+      width: 3px;
+      height: @font-size-base;
+      margin: 0;
+      padding: 0;
+      background: none;
+      border-right: 1px solid @table-header-icon-color;
+      border-left: 1px solid @table-header-icon-color;
+      transform: translate(-50%, -50%);
+      cursor: col-resize;
+      opacity: 0;
+      transition: all 0.3s;
+
+      &::before {
+        position: absolute;
+        top: 50%;
+        left: calc(50% - 3px);
+        width: 0;
+        height: 0;
+        border-top: 2px solid transparent;
+        border-right: 2px solid transparent;
+        border-bottom: 2px solid @table-header-icon-color;
+        border-left: 2px solid @table-header-icon-color;
+        transform: translate(-50%, -50%) rotate(45deg);
+        opacity: 0;
+        transition: all 0.3s;
+        content: '';
+      }
+
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: calc(50% + 3px);
+        width: 0;
+        height: 0;
+        border-top: 2px solid @table-header-icon-color;
+        border-right: 2px solid @table-header-icon-color;
+        border-bottom: 2px solid transparent;
+        border-left: 2px solid transparent;
+        transform: translate(-50%, -50%) rotate(45deg);
+        opacity: 0;
+        transition: all 0.3s;
+        content: '';
+      }
+    }
+
+    &:hover {
+      .react-resizable-handle {
+        opacity: 1;
+
+        &::before,
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
