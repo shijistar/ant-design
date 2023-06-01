@@ -47,3 +47,22 @@
     }
   }
 }
+
+.@{table-prefix-cls}-resizable {
+  .react-resizable {
+    position: relative;
+  }
+
+  .react-resizable-handle {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    width: 5px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    transform: none;
+    cursor: col-resize;
+  }
+}
