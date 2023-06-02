@@ -46,6 +46,17 @@
       }
     }
   }
+
+  // ========================= Placeholder ==========================
+  &.@{table-prefix-cls}-empty {
+    tr.@{table-prefix-cls}-placeholder {
+      & > td {
+        // 防止无数据时，出现横向滚动条
+        // 原因是：.expanded-row-fixed 宽度设置为table的宽度，但是多了2px，是表格自身的border，所以会出现横向滚动条
+        overflow: hidden;
+      }
+    }
+  }
 }
 
 .@{table-prefix-cls}-resizable {
