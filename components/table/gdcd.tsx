@@ -42,8 +42,8 @@ function GDCDTable<RecordType extends object = any>(
   const [columns, setColumns] = useState<ColumnType<RecordType>[]>([]);
 
   useEffect(() => {
-    setColumns(cols => getColumns(props.columns || [], cols));
-  }, [props.columns]);
+    setColumns(cols => getColumns(props.columns || [], cols, resizable));
+  }, [props.columns, resizable]);
 
   const handleResize = useCallback(
     (index: number): ResizableProps['onResize'] =>
@@ -134,24 +134,35 @@ function GDCDTable<RecordType extends object = any>(
       columns={theColumns}
       components={theComponents}
       pagination={newPagination}
-      scroll={{
-        ...props.scroll,
-        x: props.scroll?.x || width,
-      }}
+      scroll={
+        resizable
+          ? {
+              ...props.scroll,
+              x: props.scroll?.x || width,
+            }
+          : props.scroll
+      }
       ref={ref}
     />
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getColumns<RecordType>(cols: ColumnType<RecordType>[], oldCols: ColumnType<RecordType>[]) {
+function getColumns<RecordType>(
+  cols: ColumnType<RecordType>[],
+  oldCols: ColumnType<RecordType>[],
+  resizable?: boolean,
+) {
   let columns: ColumnType<RecordType>[] = [];
   if (cols.length) {
     columns = cols.map(col => {
-      // 为保持列宽的稳定性，让columns变化时继承上一次的宽度
-      const ori = oldCols.find(item => item.dataIndex === col.dataIndex);
-      const width = ori ? ori.width : col.width || DEFAULT_COLUMN_WIDTH;
-      return { ellipsis: true, ...col, width };
+      if (resizable) {
+        // 为保持列宽的稳定性，让columns变化时继承上一次的宽度
+        const ori = oldCols.find(item => item.dataIndex === col.dataIndex);
+        const width = ori ? ori.width : col.width || DEFAULT_COLUMN_WIDTH;
+        return { ellipsis: true, ...col, width };
+      } else {
+        return col;
+      }
     });
   }
   return columns;
