@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ResizableProps } from 'react-resizable';
 import classNames from 'classnames';
 import endsWith from 'lodash/endsWith';
-import findLastIndex from 'lodash/findLastIndex';
+import throttle from 'lodash/throttle';
 import { copyWithStatic } from '../_util/gdcd';
 import { ColumnType, GetRowKey } from './interface';
 import { ConfigContext } from '../config-provider';
@@ -11,7 +11,6 @@ import AntTable from './Table';
 import ResizableTitle from './resizable-title';
 
 export * from './Table';
-const DEFAULT_COLUMN_WIDTH = 120;
 
 export type TableProps<RecordType> = Omit<AntTableProps<RecordType>, 'rowKey'> & {
   /** RowKey必填，防止界面不更新的问题 */
@@ -39,11 +38,42 @@ function GDCDTable<RecordType extends object = any>(
 ) {
   const { fullHeight, resizable, components, pagination, ...antdProps } = props;
   const { getPrefixCls } = React.useContext(ConfigContext);
+  const tableRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<ColumnType<RecordType>[]>([]);
 
   useEffect(() => {
-    setColumns(cols => getColumns(props.columns || [], cols, resizable));
-  }, [props.columns, resizable]);
+    if (ref && tableRef.current) {
+      ref.current = tableRef.current;
+    }
+  }, []);
+
+  const columnsFromProps = props.columns;
+  useEffect(() => {
+    setColumns(columnsFromProps || []);
+  }, [columnsFromProps]);
+
+  const throttleSetColumns = useMemo(
+    () =>
+      throttle(
+        (nextColumns: ColumnType<RecordType>[], scrollToEnd?: boolean) => {
+          setColumns(nextColumns);
+          if (scrollToEnd) {
+            setTimeout(() => {
+              const contentDom = tableRef.current?.querySelector('div[class$=table-content]');
+              if (contentDom) {
+                contentDom.scrollTo({
+                  left: contentDom.scrollWidth - contentDom.clientWidth,
+                  behavior: 'smooth',
+                });
+              }
+            });
+          }
+        },
+        50,
+        { trailing: true },
+      ),
+    [],
+  );
 
   const handleResize = useCallback(
     (index: number): ResizableProps['onResize'] =>
@@ -53,44 +83,25 @@ function GDCDTable<RecordType extends object = any>(
           ...nextColumns[index],
           width: size.width,
         };
-        setColumns(nextColumns);
+        // 拖动最后一列时，自动把表格滚动到最右边，这样可以持续调整最后一列的列宽，
+        // 否则因为右边空间有限，鼠标无法向右移动太大距离
+        throttleSetColumns(nextColumns, index === nextColumns.length - 1);
       },
     [columns],
   );
 
-  // get scroll width
-  const width = useMemo(
-    () =>
-      columns.reduce((count, col) => {
-        let currentWidth = 0;
-        const dataType = typeof col.width;
-
-        if (dataType === 'number') currentWidth = Number(col.width);
-        else if (dataType === 'string' && endsWith(col.width?.toString(), 'px'))
-          currentWidth = parseInt(col.width!.toString(), 10);
-        else currentWidth = DEFAULT_COLUMN_WIDTH; // 其他不合法情况，如'auto','100%'等
-
-        return count + currentWidth;
-      }, 0),
-    [columns],
-  );
-
-  const theColumns = useMemo(() => {
+  const finalColumns = useMemo(() => {
     if (resizable) {
-      const lastUnFixedColIdx = findLastIndex(columns, item => !item.fixed);
       return columns.map((col, index) => {
         if (col.fixed) return col;
 
-        // 最后一个非固定列不设宽度，防止不能对齐
-        const isLastUnFixedColumn = index === lastUnFixedColIdx;
-        const colWidth = isLastUnFixedColumn ? undefined : col.width;
         const onHeaderCell = col.onHeaderCell;
         return {
           ...col,
-          width: colWidth,
           onHeaderCell: column => ({
             ...onHeaderCell?.(column),
-            width: colWidth,
+            width: col.width,
+            column,
             onResize: handleResize(index),
           }),
         } as ColumnType<RecordType>;
@@ -113,6 +124,23 @@ function GDCDTable<RecordType extends object = any>(
     }
   }, [resizable, components]);
 
+  // get scroll width
+  const scrollWidth = useMemo(
+    () =>
+      columns.reduce((count, col) => {
+        let currentWidth = 0;
+        const dataType = typeof col.width;
+
+        if (dataType === 'number') currentWidth = Number(col.width);
+        else if (dataType === 'string' && endsWith(col.width?.toString(), 'px'))
+          currentWidth = parseInt(col.width!.toString(), 10);
+        else currentWidth = 0; // 其他不合法情况，如'auto','100%'等
+
+        return count + currentWidth;
+      }, 0),
+    [columns],
+  );
+
   let newPagination = useMemo(() => {
     if (typeof pagination === 'object') {
       return {
@@ -131,41 +159,20 @@ function GDCDTable<RecordType extends object = any>(
         fullHeight && getPrefixCls('table-full-height'),
         resizable && getPrefixCls('table-resizable'),
       )}
-      columns={theColumns}
+      columns={finalColumns}
       components={theComponents}
       pagination={newPagination}
       scroll={
         resizable
           ? {
               ...props.scroll,
-              x: props.scroll?.x || width,
+              x: props.scroll?.x || scrollWidth + 10,
             }
           : props.scroll
       }
-      ref={ref}
+      ref={tableRef}
     />
   );
-}
-
-function getColumns<RecordType>(
-  cols: ColumnType<RecordType>[],
-  oldCols: ColumnType<RecordType>[],
-  resizable?: boolean,
-) {
-  let columns: ColumnType<RecordType>[] = [];
-  if (cols.length) {
-    columns = cols.map(col => {
-      if (resizable) {
-        // 为保持列宽的稳定性，让columns变化时继承上一次的宽度
-        const ori = oldCols.find(item => item.dataIndex === col.dataIndex);
-        const width = ori ? ori.width : col.width || DEFAULT_COLUMN_WIDTH;
-        return { ellipsis: true, ...col, width };
-      } else {
-        return col;
-      }
-    });
-  }
-  return columns;
 }
 
 const ForwardTable = React.forwardRef(GDCDTable) as <RecordType extends object = any>(
