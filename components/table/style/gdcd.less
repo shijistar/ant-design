@@ -57,6 +57,20 @@
       }
     }
   }
+
+  // ================================================================
+  // =                           Function                           =
+  // ================================================================
+
+  // ============================ Filter ============================
+  &-filter-dropdown {
+    // Reset menu
+    .@{dropdown-prefix-cls}-menu {
+      &:empty::after {
+        content: '无数据';
+      }
+    }
+  }
 }
 
 .@{table-prefix-cls}-resizable {
@@ -65,7 +79,7 @@
 
     .@{table-prefix-cls}-filter-column {
       .@{table-prefix-cls}-filter-trigger {
-        margin: -4px 2px -4px 0;
+        margin: -4px 4px -4px 0;
       }
     }
 
