@@ -42,18 +42,12 @@ function GDCDTable<RecordType extends object = any>(
   const tableRef = useRef<HTMLDivElement>(null);
   const columnsFromProps = props.columns;
   const [columns, setColumns] = useState<ColumnType<RecordType>[] | undefined>(columnsFromProps);
-  const [tableDomWidth, setTableDomWidth] = useState(0);
 
   useEffect(() => {
     if (ref && tableRef.current) {
       ref.current = tableRef.current;
     }
   }, [ref]);
-  useEffect(() => {
-    if (tableRef.current) {
-      setTableDomWidth(tableRef.current.offsetWidth);
-    }
-  }, []);
 
   useEffect(() => {
     setColumns(old => {
@@ -178,13 +172,27 @@ function GDCDTable<RecordType extends object = any>(
       return pagination;
     }
   }, [pagination]);
+
+  // 计算content的宽度，默认设置给scroll.x，当resize列宽超过content宽度时，会自动出现横向滚动条。
+  // 注意，resize模式下必须开始就设置scroll.x，如果在拖动过程中再设置，在超过横向滚动条临界情况时，会导致表头Cell组件重新挂载，会中断拖动操作。
+  const contentDom = tableRef.current?.querySelector(
+    `.${getPrefixCls('table-content', props.prefixCls)}`,
+  );
+  let contentWidth: number | undefined;
+  if (contentDom) {
+    contentWidth = contentDom.clientWidth;
+    if (contentDom.scrollHeight > contentDom.clientHeight) {
+      contentWidth -= 17; // 15为滚动条宽度，2为滚动条边框宽度
+    }
+  }
+
   return (
     <AntTable
       {...antdProps}
       className={classNames(
         props.className,
-        fullHeight && getPrefixCls('table-full-height'),
-        resizable && getPrefixCls('table-resizable'),
+        fullHeight && getPrefixCls('table-full-height', props.prefixCls),
+        resizable && getPrefixCls('table-resizable', props.prefixCls),
       )}
       columns={finalColumns}
       components={theComponents}
@@ -197,7 +205,8 @@ function GDCDTable<RecordType extends object = any>(
                 props.scroll?.x ||
                 // 2px是border的宽度
                 (scrollWidth &&
-                  (scrollWidth >= tableDomWidth - 2 ? scrollWidth : tableDomWidth - 2)),
+                  contentWidth &&
+                  (scrollWidth >= contentWidth ? scrollWidth : contentWidth)),
             }
           : props.scroll
       }
