@@ -9,6 +9,7 @@ import { ConfigContext } from '../config-provider';
 import type { TableProps as AntTableProps } from './Table';
 import AntTable from './Table';
 import ResizableTitle from './resizable-title';
+import { isEqual } from 'lodash';
 
 export * from './Table';
 
@@ -39,60 +40,86 @@ function GDCDTable<RecordType extends object = any>(
   const { fullHeight, resizable, components, pagination, ...antdProps } = props;
   const { getPrefixCls } = React.useContext(ConfigContext);
   const tableRef = useRef<HTMLDivElement>(null);
-  const [columns, setColumns] = useState<ColumnType<RecordType>[]>([]);
+  const columnsFromProps = props.columns;
+  const [columns, setColumns] = useState<ColumnType<RecordType>[] | undefined>(columnsFromProps);
+  const [tableDomWidth, setTableDomWidth] = useState(0);
 
   useEffect(() => {
     if (ref && tableRef.current) {
       ref.current = tableRef.current;
     }
+  }, [ref]);
+  useEffect(() => {
+    if (tableRef.current) {
+      setTableDomWidth(tableRef.current.offsetWidth);
+    }
   }, []);
 
-  const columnsFromProps = props.columns;
   useEffect(() => {
-    setColumns(columnsFromProps || []);
-  }, [columnsFromProps]);
-
-  const throttleSetColumns = useMemo(
-    () =>
-      throttle(
-        (nextColumns: ColumnType<RecordType>[], scrollToEnd?: boolean) => {
-          setColumns(nextColumns);
-          if (scrollToEnd) {
-            setTimeout(() => {
-              const contentDom = tableRef.current?.querySelector('div[class$=table-content]');
-              if (contentDom) {
-                contentDom.scrollTo({
-                  left: contentDom.scrollWidth - contentDom.clientWidth,
-                  behavior: 'smooth',
-                });
-              }
-            });
+    setColumns(old => {
+      if (resizable) {
+        // 记住上一次的列宽
+        return columnsFromProps?.map(col => {
+          let oldCol = col.key ? old?.find(oc => isEqual(oc.key, col.key)) : undefined;
+          if (!oldCol && 'dataIndex' in col) {
+            oldCol = old?.find(oc => isEqual(oc.dataIndex, col.dataIndex));
           }
-        },
-        50,
-        { trailing: true },
-      ),
+          if (oldCol) {
+            return {
+              ...col,
+              width: oldCol.width,
+            };
+          }
+          return col;
+        });
+      } else {
+        return columnsFromProps;
+      }
+    });
+  }, [columnsFromProps, resizable]);
+
+  const throttleSetColumns = useCallback(
+    throttle(
+      (nextColumns: ColumnType<RecordType>[], scrollToEnd?: boolean) => {
+        setColumns(nextColumns);
+        if (scrollToEnd) {
+          setTimeout(() => {
+            const contentDom = tableRef.current?.querySelector('div[class$=table-content]');
+            if (contentDom) {
+              contentDom.scrollTo({
+                left: contentDom.scrollWidth - contentDom.clientWidth,
+                behavior: 'smooth',
+              });
+            }
+          });
+        }
+      },
+      50,
+      { trailing: true },
+    ),
     [],
   );
 
   const handleResize = useCallback(
     (index: number): ResizableProps['onResize'] =>
       (_, { size }) => {
-        const nextColumns = [...columns];
-        nextColumns[index] = {
-          ...nextColumns[index],
-          width: size.width,
-        };
-        // 拖动最后一列时，自动把表格滚动到最右边，这样可以持续调整最后一列的列宽，
-        // 否则因为右边空间有限，鼠标无法向右移动太大距离
-        throttleSetColumns(nextColumns, index === nextColumns.length - 1);
+        if (columns) {
+          const nextColumns = [...columns];
+          nextColumns[index] = {
+            ...nextColumns[index],
+            width: size.width,
+          };
+          // 拖动最后一列时，自动把表格滚动到最右边，这样可以持续调整最后一列的列宽，
+          // 否则因为右边空间有限，鼠标无法向右移动太大距离
+          throttleSetColumns(nextColumns, index === nextColumns.length - 1);
+        }
       },
-    [columns],
+    [columns, throttleSetColumns],
   );
 
   const finalColumns = useMemo(() => {
     if (resizable) {
-      return columns.map((col, index) => {
+      return columns?.map((col, index) => {
         if (col.fixed) return col;
 
         const onHeaderCell = col.onHeaderCell;
@@ -127,7 +154,7 @@ function GDCDTable<RecordType extends object = any>(
   // get scroll width
   const scrollWidth = useMemo(
     () =>
-      columns.reduce((count, col) => {
+      columns?.reduce((count, col) => {
         let currentWidth = 0;
         const dataType = typeof col.width;
 
@@ -141,7 +168,7 @@ function GDCDTable<RecordType extends object = any>(
     [columns],
   );
 
-  let newPagination = useMemo(() => {
+  const newPagination = useMemo(() => {
     if (typeof pagination === 'object') {
       return {
         defaultPageSize: pagination.defaultPageSize || 20,
@@ -166,7 +193,11 @@ function GDCDTable<RecordType extends object = any>(
         resizable
           ? {
               ...props.scroll,
-              x: props.scroll?.x || scrollWidth + 10,
+              x:
+                props.scroll?.x ||
+                // 2px是border的宽度
+                (scrollWidth &&
+                  (scrollWidth >= tableDomWidth - 2 ? scrollWidth : tableDomWidth - 2)),
             }
           : props.scroll
       }
