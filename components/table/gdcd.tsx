@@ -9,7 +9,7 @@ import { ConfigContext } from '../config-provider';
 import type { TableProps as AntTableProps } from './Table';
 import AntTable from './Table';
 import ResizableTitle from './resizable-title';
-import { isEqual } from 'lodash';
+import { floor, isEqual } from 'lodash';
 
 export * from './Table';
 
@@ -146,21 +146,36 @@ function GDCDTable<RecordType extends object = any>(
   }, [resizable, components]);
 
   // get scroll width
-  const scrollWidth = useMemo(
-    () =>
-      columns?.reduce((count, col) => {
-        let currentWidth = 0;
-        const dataType = typeof col.width;
+  const scrollWidth = useMemo(() => {
+    const total = columns?.reduce((count, col) => {
+      let currentWidth = 0;
 
-        if (dataType === 'number') currentWidth = Number(col.width);
-        else if (dataType === 'string' && endsWith(col.width?.toString(), 'px'))
-          currentWidth = parseInt(col.width!.toString(), 10);
-        else currentWidth = 0; // 其他不合法情况，如'auto','100%'等
+      if (typeof col.width === 'number') {
+        currentWidth = floor(col.width);
+      } else if (typeof col.width === 'string' && endsWith(col.width?.toString(), 'px'))
+        currentWidth = floor(parseFloat(col.width));
+      else currentWidth = 0; // 其他不合法情况，如'auto','100%'等
 
-        return count + currentWidth;
-      }, 0),
-    [columns],
-  );
+      return count + currentWidth;
+    }, 0);
+    // 无敌hack，在table的demo中出现了一种情况，所有列宽度都是整数，但是content容器的宽度却是小数，比计算值小了0.5个像素，
+    // 导致出现了横向滚动条！这里做一个修正，为了防止父容器是小数，索性统一减去1个像素
+    return total ? total - 1 : total;
+  }, [columns]);
+
+  // 获取content容器的内宽度（不含纵向滚动条、不含table边框）
+  const contentDom = tableRef.current?.querySelector(
+    `.${getPrefixCls('table-content', props.prefixCls)}`,
+  ) as HTMLDivElement;
+  let contentWidth: number | undefined;
+  if (contentDom) {
+    // contentWidth = floor(contentDom.offsetWidth); // 不要使用offsetWidth，因为offsetWidth会四舍五入
+    contentWidth = floor(parseFloat(window.getComputedStyle(contentDom).width)); // contentWidth可能为小数，向下取整
+    contentWidth -= 2; // 减去content的border
+    if (contentDom.scrollHeight > contentDom.offsetHeight) {
+      contentWidth -= 15; // 15为滚动条宽度
+    }
+  }
 
   const newPagination = useMemo(() => {
     if (typeof pagination === 'object') {
@@ -172,19 +187,6 @@ function GDCDTable<RecordType extends object = any>(
       return pagination;
     }
   }, [pagination]);
-
-  // 计算content的宽度，默认设置给scroll.x，当resize列宽超过content宽度时，会自动出现横向滚动条。
-  // 注意，resize模式下必须开始就设置scroll.x，如果在拖动过程中再设置，在超过横向滚动条临界情况时，会导致表头Cell组件重新挂载，会中断拖动操作。
-  const contentDom = tableRef.current?.querySelector(
-    `.${getPrefixCls('table-content', props.prefixCls)}`,
-  );
-  let contentWidth: number | undefined;
-  if (contentDom) {
-    contentWidth = contentDom.clientWidth;
-    if (contentDom.scrollHeight > contentDom.clientHeight) {
-      contentWidth -= 17; // 15为滚动条宽度，2为滚动条边框宽度
-    }
-  }
 
   return (
     <AntTable
@@ -203,7 +205,9 @@ function GDCDTable<RecordType extends object = any>(
               ...props.scroll,
               x:
                 props.scroll?.x ||
-                // 2px是border的宽度
+                // resize模式下必须始终设置scroll.x，否则在拖动过程中一旦超过临界值，出现scroll.x横向滚动条，会导致表头Cell组件卸载重新生成，
+                // 便会中断拖动操作，操作不连贯。
+                // 当scrollWidth超过content容器宽度时，使用scrollWidth，否则使用contentWidth，让table与content宽度一致，且刚好不出现滚动条
                 (scrollWidth &&
                   contentWidth &&
                   (scrollWidth >= contentWidth ? scrollWidth : contentWidth)),
