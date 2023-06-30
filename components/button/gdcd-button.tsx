@@ -9,7 +9,17 @@ export type ButtonProps = AntButtonProps;
 
 function GDCDButton(props: ButtonProps, ref: React.MutableRefObject<HTMLDivElement>) {
   const { ...antdProps } = props;
-  return <AntButton {...antdProps} ref={ref} />;
+
+  return (
+    <AntButton
+      {...antdProps}
+      style={{
+        padding:
+          antdProps.style?.padding || (['link', 'text'].includes(antdProps.type!) ? 0 : undefined),
+      }}
+      ref={ref}
+    />
+  );
 }
 
 const GDCDForwardButton = React.forwardRef(GDCDButton) as (
