@@ -14,6 +14,7 @@ function GDCDButton(props: ButtonProps, ref: React.MutableRefObject<HTMLDivEleme
     <AntButton
       {...antdProps}
       style={{
+        ...antdProps.style,
         padding:
           antdProps.style?.padding || (['link', 'text'].includes(antdProps.type!) ? 0 : undefined),
       }}
