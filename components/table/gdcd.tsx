@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Key, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ResizableProps } from 'react-resizable';
 import classNames from 'classnames';
 import endsWith from 'lodash/endsWith';
@@ -13,6 +13,7 @@ import { floor, isEqual } from 'lodash';
 
 export * from './Table';
 
+const SCROLL_BAR_WIDTH = 15;
 export type TableProps<RecordType> = Omit<AntTableProps<RecordType>, 'rowKey'> & {
   /** RowKey必填，防止界面不更新的问题 */
   rowKey: string | GetRowKey<RecordType>;
@@ -42,6 +43,11 @@ function GDCDTable<RecordType extends object = any>(
   const tableRef = useRef<HTMLDivElement>(null);
   const columnsFromProps = props.columns;
   const [columns, setColumns] = useState<ColumnType<RecordType>[] | undefined>(columnsFromProps);
+  // 获取content容器的内宽度（不含纵向滚动条、不含table边框）
+  let contentDom = tableRef.current?.querySelector(
+    `.${getPrefixCls('table-content', props.prefixCls)}`,
+  ) as HTMLDivElement;
+  let tableDom = contentDom?.querySelector('table') as HTMLTableElement;
 
   useEffect(() => {
     if (ref && tableRef.current) {
@@ -78,13 +84,10 @@ function GDCDTable<RecordType extends object = any>(
         setColumns(nextColumns);
         if (scrollToEnd) {
           setTimeout(() => {
-            const contentDom = tableRef.current?.querySelector('div[class$=table-content]');
-            if (contentDom) {
-              contentDom.scrollTo({
-                left: contentDom.scrollWidth - contentDom.clientWidth,
-                behavior: 'smooth',
-              });
-            }
+            contentDom?.scrollTo({
+              left: contentDom.scrollWidth - contentDom.offsetHeight,
+              behavior: 'smooth',
+            });
           });
         }
       },
@@ -146,7 +149,7 @@ function GDCDTable<RecordType extends object = any>(
   }, [resizable, components]);
 
   // get scroll width
-  const scrollWidth = useMemo(() => {
+  const columnTotalWidth = useMemo(() => {
     const total = columns?.reduce((count, col) => {
       let currentWidth = 0;
 
@@ -163,19 +166,38 @@ function GDCDTable<RecordType extends object = any>(
     return total ? total - 1 : total;
   }, [columns]);
 
-  // 获取content容器的内宽度（不含纵向滚动条、不含table边框）
-  const contentDom = tableRef.current?.querySelector(
-    `.${getPrefixCls('table-content', props.prefixCls)}`,
-  ) as HTMLDivElement;
-  let contentWidth: number | undefined;
-  if (contentDom) {
-    // contentWidth = floor(contentDom.offsetWidth); // 不要使用offsetWidth，因为offsetWidth会四舍五入
-    contentWidth = floor(parseFloat(window.getComputedStyle(contentDom).width)); // contentWidth可能为小数，向下取整
-    contentWidth -= 2; // 减去content的border
-    if (contentDom.scrollHeight > contentDom.offsetHeight) {
-      contentWidth -= 15; // 15为滚动条宽度
+  const [contentWidth, setContentWidth] = useState<number>();
+  const [hasVerticalScroll, setHasVerticalScroll] = useState(false);
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(([contentSize /* tableSize */]) => {
+      // contentWidth可能为小数，向下取整
+      let parentWidth = Math.min(
+        // 减去content的border
+        floor(parseFloat(window.getComputedStyle(contentDom).width) - 2 || 0),
+        // 监听到的内部宽度，两者取最小者
+        floor(contentSize.contentBoxSize[0]?.inlineSize || Number.MAX_SAFE_INTEGER),
+      )!;
+      // 是否有滚动条
+      if (contentDom.scrollHeight > contentDom.offsetHeight) {
+        setHasVerticalScroll(true);
+        parentWidth -= SCROLL_BAR_WIDTH;
+      } else {
+        setHasVerticalScroll(false);
+      }
+      setContentWidth(parentWidth);
+    });
+
+    if (tableDom) {
+      resizeObserver.observe(contentDom!);
+      resizeObserver.observe(tableDom);
     }
-  }
+    return () => {
+      if (tableDom) {
+        resizeObserver.unobserve(contentDom!);
+        resizeObserver.unobserve(tableDom);
+      }
+    };
+  }, [tableDom]);
 
   const newPagination = useMemo(() => {
     if (typeof pagination === 'object') {
@@ -208,9 +230,11 @@ function GDCDTable<RecordType extends object = any>(
                 // resize模式下必须始终设置scroll.x，否则在拖动过程中一旦超过临界值，出现scroll.x横向滚动条，会导致表头Cell组件卸载重新生成，
                 // 便会中断拖动操作，操作不连贯。
                 // 当scrollWidth超过content容器宽度时，使用scrollWidth，否则使用contentWidth，让table与content宽度一致，且刚好不出现滚动条
-                (scrollWidth &&
+                (columnTotalWidth &&
                   contentWidth &&
-                  (scrollWidth >= contentWidth ? scrollWidth : contentWidth)),
+                  (columnTotalWidth > contentWidth + (hasVerticalScroll ? SCROLL_BAR_WIDTH : 0)
+                    ? columnTotalWidth
+                    : contentWidth)),
             }
           : props.scroll
       }
@@ -219,8 +243,23 @@ function GDCDTable<RecordType extends object = any>(
   );
 }
 
-const ForwardTable = React.forwardRef(GDCDTable) as <RecordType extends object = any>(
+const ForwardTable = React.forwardRef(GDCDTable) as unknown as (<RecordType extends object = any>(
   props: React.PropsWithChildren<TableProps<RecordType>> & { ref?: React.Ref<HTMLDivElement> },
-) => React.ReactElement;
+) => React.ReactElement) & {
+  /** 获取行的key */
+  getRowKey: <RecordType extends object = any>(
+    record: RecordType,
+    tableRowKey: TableProps<RecordType>['rowKey'],
+  ) => Key;
+};
+ForwardTable.getRowKey = <RecordType extends object = any>(
+  record: RecordType,
+  tableRowKey: TableProps<RecordType>['rowKey'] = 'key',
+) => {
+  if (typeof tableRowKey === 'function') {
+    return tableRowKey(record) as Key;
+  }
+  return (record as any)?.[tableRowKey as string] as Key;
+};
 
 export default copyWithStatic(AntTable, ForwardTable);
