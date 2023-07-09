@@ -9,6 +9,18 @@ timeline: true
 
 ---
 
+## 4.23.5-10
+
+`2023-07-10`
+
+- 优化 `Input.Search` 组件的 `onSearch` 事件
+- Table 组件的 `rowKey` 必填
+- 优化 Table 组件的 fullHeight 样式
+- Modal 的内置图标更换为 Filled 版本
+- 统一分页组件风格
+- 高亮显示 Table 列的 filter 搜索文本
+- 调高 `message`、`notification` 的 zindex 级别
+
 ## 4.23.5-9
 
 `2022-01-08`
