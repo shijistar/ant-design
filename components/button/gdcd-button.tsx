@@ -5,10 +5,13 @@ import AntButton from './button';
 
 export * from './button';
 
-export type ButtonProps = AntButtonProps;
+export type ButtonProps = AntButtonProps & {
+  /** Type=link|text 时，会去掉padding，此属性可以强制添加padding */
+  padding?: true;
+};
 
 function GDCDButton(props: ButtonProps, ref: React.MutableRefObject<HTMLDivElement>) {
-  const { ...antdProps } = props;
+  const { padding, ...antdProps } = props;
 
   return (
     <AntButton
@@ -16,7 +19,8 @@ function GDCDButton(props: ButtonProps, ref: React.MutableRefObject<HTMLDivEleme
       style={{
         ...antdProps.style,
         padding:
-          antdProps.style?.padding || (['link', 'text'].includes(antdProps.type!) ? 0 : undefined),
+          antdProps.style?.padding ||
+          (['link', 'text'].includes(antdProps.type!) && !padding ? 0 : undefined),
       }}
       ref={ref}
     />
