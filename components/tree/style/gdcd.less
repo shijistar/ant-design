@@ -5,6 +5,15 @@
 @tree-node-hightlight-color: @warning-color;
 
 .@{tree-prefix-cls} {
+  &.@{tree-prefix-cls}-block-node {
+    .@{tree-prefix-cls}-list-holder-inner {
+      // 节点内容是flex-auto的，但如果内容中包含连续字母或数字时，会把title撑的很宽，甚至超过100%，
+      // 因为没有限制最小宽度。这根flex-column，需要设置min-height:0道理一样
+      .@{tree-prefix-cls}-node-content-wrapper {
+        min-width: 0;
+      }
+    }
+  }
   // 重写缩进尺寸，变小一些
   &-indent {
     &-unit {
