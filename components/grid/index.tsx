@@ -1,4 +1,4 @@
-import Col from './col';
+import Col from './gdcd-col';
 import useInternalBreakpoint from './hooks/useBreakpoint';
 import Row from './gdcd-row';
 
@@ -7,7 +7,7 @@ function useBreakpoint() {
   return useInternalBreakpoint();
 }
 
-export { ColProps, ColSize } from './col';
+export { ColProps, ColSize } from './gdcd-col';
 export { RowProps } from './gdcd-row';
 export { Row, Col };
 
