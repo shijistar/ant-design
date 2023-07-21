@@ -33,7 +33,7 @@ const GDCDRow = (props: RowProps, ref: MutableRefObject<HTMLDivElement>) => {
   return (
     <Row
       // 纵向布局时，wrap默认为false
-      wrap={wrap || (direction?.includes('column') ? false : undefined)}
+      wrap={wrap ?? (direction?.includes('column') ? false : undefined)}
       {...rowProps}
       className={classNames(
         className,
